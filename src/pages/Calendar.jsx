@@ -7,32 +7,55 @@ import TopMenu from '../components/TopMenu'
 import './BasePage.css'
 import './Calendar.css'
 
-const categories = [
-  { id: 0, name: '업무', color: '#FF6B6B' },
-  { id: 1, name: '개인', color: '#4ECDC4' },
-  { id: 2, name: '운동', color: '#45B7D1' },
-  { id: 3, name: '공부', color: '#FFA07A' },
-  { id: 4, name: '약속', color: '#98D8C8' },
-  { id: 5, name: '기타', color: '#F7DC6F' },
-]
-
-const eventTypes = [
-  { id: 'single', name: '당일' },
-  { id: 'range', name: '기간' },
-  { id: 'repeat', name: '반복' },
-]
-
-const repeatIntervals = [
-  { id: '1week', name: '1주' },
-  { id: '2week', name: '2주' },
-  { id: '1month', name: '한달' },
-  { id: '6month', name: '6개월' },
-  { id: '1year', name: '1년' },
-]
-
 const Calendar = () => {
   const navigate = useNavigate()
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
+  
+  const categories = language === 'ko'
+    ? [
+        { id: 0, name: '업무', color: '#FF6B6B' },
+        { id: 1, name: '개인', color: '#4ECDC4' },
+        { id: 2, name: '운동', color: '#45B7D1' },
+        { id: 3, name: '공부', color: '#FFA07A' },
+        { id: 4, name: '약속', color: '#98D8C8' },
+        { id: 5, name: '기타', color: '#F7DC6F' },
+      ]
+    : [
+        { id: 0, name: 'Work', color: '#FF6B6B' },
+        { id: 1, name: 'Personal', color: '#4ECDC4' },
+        { id: 2, name: 'Exercise', color: '#45B7D1' },
+        { id: 3, name: 'Study', color: '#FFA07A' },
+        { id: 4, name: 'Appointment', color: '#98D8C8' },
+        { id: 5, name: 'Other', color: '#F7DC6F' },
+      ]
+
+  const eventTypes = language === 'ko'
+    ? [
+        { id: 'single', name: '당일' },
+        { id: 'range', name: '기간' },
+        { id: 'repeat', name: '반복' },
+      ]
+    : [
+        { id: 'single', name: 'Single Day' },
+        { id: 'range', name: 'Range' },
+        { id: 'repeat', name: 'Repeat' },
+      ]
+
+  const repeatIntervals = language === 'ko'
+    ? [
+        { id: '1week', name: '1주' },
+        { id: '2week', name: '2주' },
+        { id: '1month', name: '한달' },
+        { id: '6month', name: '6개월' },
+        { id: '1year', name: '1년' },
+      ]
+    : [
+        { id: '1week', name: '1 Week' },
+        { id: '2week', name: '2 Weeks' },
+        { id: '1month', name: '1 Month' },
+        { id: '6month', name: '6 Months' },
+        { id: '1year', name: '1 Year' },
+      ]
   const [currentDate, setCurrentDate] = useState(new Date())
   const [events, setEvents] = useState([])
   const [selectedDate, setSelectedDate] = useState(null)
@@ -213,7 +236,7 @@ const Calendar = () => {
   }
 
   const deleteEvent = (id) => {
-    if (window.confirm('일정을 삭제하시겠습니까?')) {
+    if (window.confirm(language === 'ko' ? '일정을 삭제하시겠습니까?' : 'Are you sure you want to delete this event?')) {
       const updated = events.filter((e) => e.id !== id && e.parentId !== id)
       saveEvents(updated)
     }
@@ -308,7 +331,12 @@ const Calendar = () => {
   }
 
   const formatDate = (date) => {
-    return `${date.getFullYear()}년 ${date.getMonth() + 1}월`
+    if (language === 'ko') {
+      return `${date.getFullYear()}년 ${date.getMonth() + 1}월`
+    } else {
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+      return `${monthNames[date.getMonth()]} ${date.getFullYear()}`
+    }
   }
 
   const formatDateKey = (year, month, day) => {
@@ -317,12 +345,16 @@ const Calendar = () => {
 
   const formatDateDisplay = (dateStr) => {
     const date = new Date(dateStr + 'T00:00:00')
-    const weekdays = ['일', '월', '화', '수', '목', '금', '토']
+    const weekdays = language === 'ko' 
+      ? ['일', '월', '화', '수', '목', '금', '토']
+      : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
     return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')} (${weekdays[date.getDay()]})`
   }
 
   const days = getDaysInMonth(currentDate)
-  const weekdays = ['일', '월', '화', '수', '목', '금', '토']
+  const weekdays = language === 'ko' 
+    ? ['일', '월', '화', '수', '목', '금', '토']
+    : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   const selectedDateEvents = selectedDate ? sortEvents(getEventsForDate(selectedDate)) : []
 
   return (
@@ -400,12 +432,12 @@ const Calendar = () => {
               onClick={() => setSelectedDate(null)}
               style={{ padding: '6px 12px', fontSize: '14px' }}
             >
-              닫기
+              {language === 'ko' ? '닫기' : 'Close'}
             </button>
           </div>
           {selectedDateEvents.length === 0 ? (
             <div className="empty-state" style={{ padding: '20px' }}>
-              일정이 없습니다
+              {language === 'ko' ? '일정이 없습니다' : 'No events'}
             </div>
           ) : (
             <div className="event-list">
@@ -440,14 +472,14 @@ const Calendar = () => {
                         onClick={() => openModal(event)}
                         style={{ padding: '6px 12px', fontSize: '12px' }}
                       >
-                        수정
+                        {language === 'ko' ? '수정' : 'Edit'}
                       </button>
                       <button
                         className="action-btn delete-btn"
                         onClick={() => deleteEvent(event.id)}
                         style={{ padding: '6px 12px', fontSize: '12px' }}
                       >
-                        삭제
+                        {language === 'ko' ? '삭제' : 'Delete'}
                       </button>
                     </div>
                   </div>
@@ -460,7 +492,7 @@ const Calendar = () => {
             onClick={() => openModal(null, selectedDate)}
             style={{ width: '100%', marginTop: '15px' }}
           >
-            일정 추가
+            {language === 'ko' ? '일정 추가' : 'Add Event'}
           </button>
         </div>
       )}
@@ -469,10 +501,10 @@ const Calendar = () => {
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h2 style={{ color: '#FFB6C1', marginBottom: '20px' }}>
-              {editingEvent ? '일정 수정' : '일정 추가'}
+              {editingEvent ? (language === 'ko' ? '일정 수정' : 'Edit Event') : (language === 'ko' ? '일정 추가' : 'Add Event')}
             </h2>
             <div className="form-group">
-              <label className="form-label">제목 *</label>
+              <label className="form-label">{language === 'ko' ? '제목 *' : 'Title *'}</label>
               <input
                 type="text"
                 className="form-input"
@@ -481,7 +513,7 @@ const Calendar = () => {
               />
             </div>
             <div className="form-group">
-              <label className="form-label">일정 타입</label>
+              <label className="form-label">{language === 'ko' ? '일정 타입' : 'Event Type'}</label>
               <select
                 className="form-select"
                 value={formData.eventType}
@@ -495,29 +527,31 @@ const Calendar = () => {
               </select>
             </div>
             <div className="form-group">
-              <label className="form-label">시작 날짜 *</label>
+              <label className="form-label">{language === 'ko' ? '시작 날짜 *' : 'Start Date *'}</label>
               <input
                 type="date"
                 className="form-input"
                 value={formData.date}
                 onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                lang={language}
               />
             </div>
             {formData.eventType === 'range' && (
               <div className="form-group">
-                <label className="form-label">종료 날짜 *</label>
+                <label className="form-label">{language === 'ko' ? '종료 날짜 *' : 'End Date *'}</label>
                 <input
                   type="date"
                   className="form-input"
                   value={formData.endDate}
                   onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+                  lang={language}
                 />
               </div>
             )}
             {formData.eventType === 'repeat' && (
               <>
                 <div className="form-group">
-                  <label className="form-label">반복 주기</label>
+                  <label className="form-label">{language === 'ko' ? '반복 주기' : 'Repeat Interval'}</label>
                   <select
                     className="form-select"
                     value={formData.repeatInterval}
@@ -533,7 +567,7 @@ const Calendar = () => {
                   </select>
                 </div>
                 <div className="form-group">
-                  <label className="form-label">달력</label>
+                  <label className="form-label">{language === 'ko' ? '달력' : 'Calendar'}</label>
                   <select
                     className="form-select"
                     value={formData.repeatCalendar}
@@ -541,14 +575,14 @@ const Calendar = () => {
                       setFormData({ ...formData, repeatCalendar: e.target.value })
                     }
                   >
-                    <option value="solar">양력</option>
-                    <option value="lunar">음력</option>
+                    <option value="solar">{language === 'ko' ? '양력' : 'Solar'}</option>
+                    <option value="lunar">{language === 'ko' ? '음력' : 'Lunar'}</option>
                   </select>
                 </div>
               </>
             )}
             <div className="form-group">
-              <label className="form-label">시간</label>
+              <label className="form-label">{language === 'ko' ? '시간' : 'Time'}</label>
               <input
                 type="time"
                 className="form-input"
@@ -557,7 +591,7 @@ const Calendar = () => {
               />
             </div>
             <div className="form-group">
-              <label className="form-label">카테고리</label>
+              <label className="form-label">{language === 'ko' ? '카테고리' : 'Category'}</label>
               <select
                 className="form-select"
                 value={formData.category}
@@ -573,7 +607,7 @@ const Calendar = () => {
               </select>
             </div>
             <div className="form-group">
-              <label className="form-label">설명</label>
+              <label className="form-label">{language === 'ko' ? '설명' : 'Description'}</label>
               <textarea
                 className="form-textarea"
                 value={formData.description}
@@ -584,35 +618,35 @@ const Calendar = () => {
             </div>
             {editingEvent && editingEvent.eventType === 'repeat' && (
               <div className="form-group">
-                <label className="form-label">수정 범위</label>
+                <label className="form-label">{language === 'ko' ? '수정 범위' : 'Edit Range'}</label>
                 <div style={{ display: 'flex', gap: '10px' }}>
                   <button
                     className={`action-btn ${editMode === 'all' ? 'active' : ''}`}
                     onClick={() => setEditMode('all')}
                   >
-                    전체 변경
+                    {language === 'ko' ? '전체 변경' : 'All'}
                   </button>
                   <button
                     className={`action-btn ${editMode === 'this' ? 'active' : ''}`}
                     onClick={() => setEditMode('this')}
                   >
-                    해당 일정만
+                    {language === 'ko' ? '해당 일정만' : 'This Only'}
                   </button>
                   <button
                     className={`action-btn ${editMode === 'future' ? 'active' : ''}`}
                     onClick={() => setEditMode('future')}
                   >
-                    앞으로 변경
+                    {language === 'ko' ? '앞으로 변경' : 'Future'}
                   </button>
                 </div>
               </div>
             )}
             <div className="form-actions">
               <button className="action-btn" onClick={closeModal}>
-                취소
+                {language === 'ko' ? '취소' : 'Cancel'}
               </button>
               <button className="add-btn" onClick={saveEvent}>
-                저장
+                {language === 'ko' ? '저장' : 'Save'}
               </button>
               {editingEvent && (
                 <button
@@ -622,7 +656,7 @@ const Calendar = () => {
                     closeModal()
                   }}
                 >
-                  삭제
+                  {language === 'ko' ? '삭제' : 'Delete'}
                 </button>
               )}
             </div>

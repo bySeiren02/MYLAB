@@ -26,7 +26,7 @@
 .date-selector {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 20px;
   padding: 20px;
   background: var(--card-bg);
@@ -311,6 +311,9 @@
   .date-selector {
     padding: 15px;
     gap: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .date-btn {

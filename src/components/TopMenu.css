@@ -5,9 +5,11 @@
   z-index: 2000;
   padding: 10px;
   padding-top: max(10px, env(safe-area-inset-top));
+  pointer-events: none;
 }
 
 .top-menu-button {
+  pointer-events: auto;
   background: var(--color-primary);
   border: none;
   color: var(--button-text);
@@ -21,6 +23,10 @@
   transition: all 0.3s;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   -webkit-tap-highlight-color: transparent;
+}
+
+.top-menu-dropdown {
+  pointer-events: auto;
 }
 
 .top-menu-button:hover {

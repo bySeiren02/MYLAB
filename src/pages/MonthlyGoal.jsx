@@ -154,7 +154,6 @@ const MonthlyGoal = () => {
             onClick={() => setShowIconPicker(!showIconPicker)}
             style={{ minWidth: '50px', padding: '10px' }}
           >
-            {selectedIcon || '🎯'} {t('icon')}
           </button>
           <input
             className="form-input"

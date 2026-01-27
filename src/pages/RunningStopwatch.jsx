@@ -902,8 +902,8 @@ const RunningStopwatch = () => {
     const routineIndex = routines.findIndex(r => r.id === routine.id)
     
     if (routineIndex !== -1) {
-      // 선택한 루틴 이전의 모든 루틴을 완료 처리
-      const newCompleted = new Set(completedRoutines)
+      // 선택한 루틴 이전의 모든 루틴을 완료 처리 (기존 칼로리부터 계산하기 위해)
+      const newCompleted = new Set()
       for (let i = 0; i < routineIndex; i++) {
         newCompleted.add(routines[i].id)
       }

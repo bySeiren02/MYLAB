@@ -182,7 +182,12 @@ const Dermatology = () => {
   }
 
   const formatMonthYear = () => {
-    return `${currentYear}년 ${currentMonth + 1}월`
+    if (language === 'ko') {
+      return `${currentYear}년 ${currentMonth + 1}월`
+    } else {
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+      return `${monthNames[currentMonth]} ${currentYear}`
+    }
   }
 
   const getWeekdays = () => {
@@ -210,14 +215,14 @@ const Dermatology = () => {
         <h1 className="page-title">{t('dermatology')}</h1>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', marginTop: '20px' }}>
-        <button className="action-btn" onClick={goToPreviousMonth}>
+      <div className="date-selector" style={{ marginBottom: '20px', marginTop: '20px' }}>
+        <button className="date-btn" onClick={goToPreviousMonth}>
           &lt;
         </button>
         <h2 style={{ color: 'var(--color-secondary)', margin: 0 }}>
           {formatMonthYear()}
         </h2>
-        <button className="action-btn" onClick={goToNextMonth}>
+        <button className="date-btn" onClick={goToNextMonth}>
           &gt;
         </button>
       </div>
@@ -243,7 +248,10 @@ const Dermatology = () => {
               </div>
               
               <div style={{ color: 'var(--color-text-muted)', fontSize: '12px', marginBottom: '10px' }}>
-                {weekRange.start}일 ~ {weekRange.end}일
+                {language === 'ko' 
+                  ? `${weekRange.start}일 ~ ${weekRange.end}일`
+                  : `${weekRange.start} ~ ${weekRange.end}`
+                }
               </div>
 
               {weekData ? (
@@ -251,7 +259,17 @@ const Dermatology = () => {
                   <div className="item-content" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '8px' }}>
                     {weekData.date && (
                       <div style={{ color: 'var(--color-text)', fontWeight: 'bold' }}>
-                        {weekData.date} {weekData.weekday && `(${getWeekdays()[weekData.weekday]})`}
+                        {(() => {
+                          const date = new Date(weekData.date)
+                          const year = date.getFullYear()
+                          const month = String(date.getMonth() + 1).padStart(2, '0')
+                          const day = String(date.getDate()).padStart(2, '0')
+                          if (language === 'ko') {
+                            return `${year}.${month}.${day}${weekData.weekday !== undefined ? ` (${getWeekdays()[weekData.weekday]})` : ''}`
+                          } else {
+                            return `${year}-${month}-${day}${weekData.weekday !== undefined ? ` (${getWeekdays()[weekData.weekday]})` : ''}`
+                          }
+                        })()}
                       </div>
                     )}
                     {weekData.treatments && (
@@ -313,6 +331,7 @@ const Dermatology = () => {
                   const adjustedWeekday = weekday === 0 ? 6 : weekday - 1
                   setFormData({ ...formData, date: e.target.value, weekday: adjustedWeekday })
                 }}
+                lang={language}
               />
             </div>
             {formData.date && (

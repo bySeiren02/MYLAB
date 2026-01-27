@@ -16,6 +16,12 @@
   height: 70px;
   width: 100%;
   box-sizing: border-box;
+  pointer-events: none;
+}
+
+.bottom-menu-item,
+.bottom-menu-dropdown {
+  pointer-events: auto;
 }
 
 .bottom-menu-category {
