@@ -1,0 +1,60 @@
+.diet-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: rgba(255, 182, 193, 0.1);
+  border: 1px solid rgba(255, 182, 193, 0.3);
+  border-radius: 15px;
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.diet-section {
+  margin-bottom: 30px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.section-header h2 {
+  margin: 0;
+}
+
+/* iPhone 14 Pro Max (430px) */
+@media screen and (max-width: 430px) {
+  .diet-summary {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    padding: 15px;
+  }
+
+  .summary-item {
+    gap: 8px;
+  }
+
+  .summary-item > div:first-child {
+    font-size: 13px;
+  }
+
+  .summary-item > div:last-child {
+    font-size: 20px;
+  }
+
+  .section-header {
+    margin-bottom: 12px;
+  }
+
+  .section-header h2 {
+    font-size: 16px;
+  }
+}
