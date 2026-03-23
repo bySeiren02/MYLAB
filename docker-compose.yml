@@ -1,0 +1,46 @@
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: basiccrud
+      MYSQL_USER: app
+      MYSQL_PASSWORD: apppassword
+    ports:
+      - "3307:3306"   # 호스트 3307 사용 (로컬 MySQL이 3306을 쓸 때 충돌 방지)
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: basiccrud
+      MYSQL_USERNAME: app
+      MYSQL_PASSWORD: apppassword
+      JWT_SECRET: docker-jwt-secret-key-at-least-256-bits-long-for-production-use
+    ports:
+      - "8081:8080"   # 호스트 8081 사용 (로컬에서 8080 쓸 때 충돌 방지)
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:
