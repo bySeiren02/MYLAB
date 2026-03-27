@@ -31,7 +31,7 @@ public class TrackerRecord {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String details;
 
-    @Column(precision = 12, scale = 2)
+    @Column
     private Double amount;
 
     @Column(name = "distance_km")

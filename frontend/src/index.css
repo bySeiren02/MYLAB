@@ -9,7 +9,10 @@
   --primary-hover: #ff6385;  /* 호버용 진한 핑크 */
   --danger: #f97373;
   --success: #22c55e;
-  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-size-base: 16px;
+  --font-family-base: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
   line-height: 1.6;
   color: var(--text);
   background-color: var(--bg);
@@ -60,15 +63,19 @@ button {
   align-items: center;
   justify-content: center;
   padding: 0.5rem 1rem;
-  border: none;
+  min-height: 2.4rem;
+  border: 1px solid transparent;
   border-radius: 8px;
   font-weight: 500;
-  transition: background-color 0.2s, color 0.2s;
+  transition: transform 0.15s ease, filter 0.2s ease, box-shadow 0.2s ease, background-color 0.2s, color 0.2s, border-color 0.2s;
+  box-sizing: border-box;
+  white-space: nowrap;
 }
 
 .btn-primary {
   background: var(--primary);
   color: white;
+  border-color: var(--primary);
 }
 
 .btn-primary:hover {
@@ -82,16 +89,38 @@ button {
 }
 
 .btn-secondary:hover {
-  background: #ffd3e6;
+  background: var(--surface);
+  border-color: var(--primary);
+  color: var(--primary);
 }
 
 .btn-danger {
   background: var(--danger);
   color: white;
+  border-color: var(--danger);
 }
 
 .btn-danger:hover {
   background: #dc2626;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.03);
+}
+
+.btn:active {
+  transform: translateY(0);
+  filter: brightness(0.98);
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 135, 161, 0.25);
+}
+
+.btn-uniform {
+  min-width: 4.6rem;
 }
 
 .form-group {
@@ -174,7 +203,7 @@ button {
 }
 
 .calendar-cell {
-  min-height: 56px;
+  min-height: 78px;
   border: 1px solid var(--border);
   border-radius: 8px;
   background: transparent;
@@ -182,8 +211,9 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 2px;
+  padding-top: 4px;
 }
 
 .calendar-cell small {

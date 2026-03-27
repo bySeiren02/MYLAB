@@ -1,0 +1,157 @@
+.home__compact {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.home__block {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 0.75rem;
+}
+
+.home__h2 {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.home__moods {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.home__mood {
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  background: transparent;
+  padding: 0.45rem;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.home__mood.active {
+  background: rgba(255, 135, 161, 0.12);
+}
+
+.home__q {
+  color: var(--text);
+  margin-bottom: 0.5rem;
+  line-height: 1.45;
+  font-size: 0.95rem;
+}
+
+.home__ta {
+  width: 100%;
+  min-height: 64px;
+  max-height: 96px;
+  resize: vertical;
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.home__cal {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 0.75rem;
+}
+
+.home__calHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.home__calTitle {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.home__nav {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.home__hint {
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+button.calendar-cell {
+  cursor: pointer;
+  text-align: center;
+}
+
+.home__panelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.calendar-cell.today {
+  border-color: rgba(255, 135, 161, 0.85);
+}
+
+.calendar-cell.selected {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px rgba(255, 135, 161, 0.35) inset;
+}
+
+.calendar-cell.period {
+  background: rgba(255, 99, 132, 0.2);
+  border-color: rgba(255, 99, 132, 0.6);
+}
+
+@media (orientation: landscape) {
+  .home {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    gap: 0.7rem;
+    align-items: start;
+  }
+
+  .home > .page-title-row {
+    grid-column: 1 / -1;
+    margin-bottom: 0.2rem;
+  }
+
+  .home__compact {
+    margin-bottom: 0;
+    gap: 0.6rem;
+  }
+
+  .home__cal {
+    min-height: calc(100vh - 11rem);
+  }
+
+  .home__moods {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.35rem;
+  }
+
+  .home__mood {
+    padding: 0.35rem;
+    font-size: 1.05rem;
+  }
+
+  .home__ta {
+    min-height: 54px;
+    max-height: 82px;
+  }
+}

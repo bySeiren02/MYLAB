@@ -1,0 +1,80 @@
+.compact-cal {
+  margin-bottom: 1rem;
+}
+
+.compact-cal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.compact-cal__title {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.compact-cal__nav {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.compact-cal__grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.compact-cal__weekday {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  padding: 0.25rem 0;
+}
+
+.compact-cal__cell {
+  min-height: 3.35rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.85rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 0.25rem;
+}
+
+.compact-cal__cell--muted {
+  opacity: 0.35;
+}
+
+.compact-cal__cell--today {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px rgba(255, 135, 161, 0.35) inset;
+}
+
+.compact-cal__cell--selected {
+  border-color: var(--primary);
+  background: rgba(255, 135, 161, 0.12);
+}
+
+.compact-cal__cell--hl {
+  background: rgba(34, 197, 94, 0.12);
+}
+
+.compact-cal__cell--period {
+  background: rgba(255, 99, 132, 0.22);
+  border-color: rgba(255, 99, 132, 0.55);
+}
+
+.compact-cal__cell:active {
+  transform: scale(0.98);
+}
