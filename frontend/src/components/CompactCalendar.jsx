@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { buildMonthGridDays, formatMonthLabel, formatYmdKey } from '../utils/dateUtils'
+import { getStorage } from '../utils/storage'
 import { getPeriodDateKeys } from '../utils/periodUtils'
 import './CompactCalendar.css'
 
@@ -17,7 +18,8 @@ export default function CompactCalendar({
   }, [currentDate])
 
   useEffect(() => {
-    setPeriodKeys(getPeriodDateKeys())
+    const female = getStorage('current_user', null)?.gender === 'female'
+    setPeriodKeys(female ? getPeriodDateKeys() : [])
   }, [viewDate])
 
   const today = new Date()

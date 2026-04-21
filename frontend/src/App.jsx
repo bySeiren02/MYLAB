@@ -11,10 +11,12 @@ import DietPage from './pages/DietPage'
 import SupplementsPage from './pages/SupplementsPage'
 import SkincarePage from './pages/SkincarePage'
 import DermatologyPage from './pages/DermatologyPage'
+import ProcedurePage from './pages/ProcedurePage'
 import ReadingPage from './pages/ReadingPage'
 import StudyPlanPage from './pages/StudyPlanPage'
 import CulturalPage from './pages/CulturalPage'
 import MovieDramaPage from './pages/MovieDramaPage'
+import FictionWebtoonPage from './pages/FictionWebtoonPage'
 import DatePage from './pages/DatePage'
 
 function ProtectedRoute({ children }) {
@@ -25,6 +27,7 @@ function ProtectedRoute({ children }) {
 
 export default function App() {
   return (
+    <div className="app-routes-fill">
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
@@ -42,14 +45,17 @@ export default function App() {
         <Route path="/diet" element={<DietPage />} />
         <Route path="/supplements" element={<SupplementsPage />} />
         <Route path="/skincare" element={<SkincarePage />} />
+        <Route path="/procedure" element={<ProcedurePage />} />
         <Route path="/dermatology" element={<DermatologyPage />} />
         <Route path="/reading" element={<ReadingPage />} />
         <Route path="/study-plan" element={<StudyPlanPage />} />
         <Route path="/movie-drama" element={<MovieDramaPage />} />
         <Route path="/cultural" element={<CulturalPage />} />
+        <Route path="/fiction" element={<FictionWebtoonPage />} />
         <Route path="/date" element={<DatePage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    </div>
   )
 }

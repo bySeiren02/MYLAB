@@ -15,7 +15,7 @@ function toDateKey(date) {
   return `${y}-${m}-${d}`
 }
 
-export default function DatePickButton({ label, value, onChange, placeholder = '날짜 선택' }) {
+export default function DatePickButton({ label, value, onChange, placeholder = '' }) {
   const [open, setOpen] = useState(false)
   const selected = useMemo(() => parseDate(value), [value])
 

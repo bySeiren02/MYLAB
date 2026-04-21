@@ -9,6 +9,7 @@ const categories = [
     label: '계획',
     icon: '📋',
     items: [
+      { to: '/daily-todo', label: '투두리스트' },
       { to: '/monthly-goal', label: '월 목표' },
       { to: '/yearly-goal', label: '연 목표' },
     ],
@@ -27,6 +28,7 @@ const categories = [
     items: [
       { to: '/supplements', label: '영양제' },
       { to: '/skincare', label: '피부관리' },
+      { to: '/procedure', label: '시술' },
       { to: '/dermatology', label: '피부과' },
     ],
   },
@@ -35,10 +37,18 @@ const categories = [
     label: '성장',
     icon: '📚',
     items: [
-      { to: '/reading', label: '독서' },
       { to: '/study-plan', label: '공부' },
-      { to: '/movie-drama', label: '영화&드라마' },
-      { to: '/cultural', label: '문화생활' },
+      { to: '/reading', label: '독서' },
+    ],
+  },
+  {
+    id: 'culture_log',
+    label: '감상 기록',
+    icon: '🎭',
+    items: [
+      { to: '/movie-drama', label: '시청·공연' },
+      { to: '/cultural', label: '전시·나들이' },
+      { to: '/fiction', label: '소설·웹툰' },
     ],
   },
   {

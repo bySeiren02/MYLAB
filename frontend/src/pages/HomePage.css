@@ -1,7 +1,38 @@
+.home {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.home .page-route-body > .home__compact {
+  flex-shrink: 0;
+}
+
+.home .page-route-body > .page-title-row {
+  margin-bottom: 0.5rem;
+}
+
+.home .page-route-body > .home__cal {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.home__cal .home__calHead {
+  flex-shrink: 0;
+}
+
+.home__cal .home__hint {
+  flex-shrink: 0;
+}
+
 .home__compact {
   display: grid;
   gap: 0.75rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
+  flex-shrink: 0;
 }
 
 .home__block {
@@ -26,14 +57,36 @@
 .home__mood {
   border-radius: 12px;
   border: 2px solid var(--border);
-  background: transparent;
+  background: var(--bg);
   padding: 0.45rem;
   font-size: 1.2rem;
   line-height: 1;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.home__mood:hover:not(.active) {
+  background: color-mix(in srgb, var(--surface) 88%, var(--text) 4%);
+  border-color: color-mix(in srgb, var(--border) 70%, var(--text-muted) 30%);
 }
 
 .home__mood.active {
-  background: rgba(255, 135, 161, 0.12);
+  border-width: 3px;
+  padding: calc(0.45rem - 1px);
+  background: color-mix(in srgb, var(--mood-accent, var(--primary)) 26%, var(--surface));
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--mood-accent, var(--primary)) 38%, transparent),
+    0 6px 18px rgba(0, 0, 0, 0.2);
+  transform: scale(1.08);
+  z-index: 1;
+  position: relative;
+}
+
+.home__mood.active span {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.25));
 }
 
 .home__q {
@@ -47,7 +100,7 @@
   width: 100%;
   min-height: 64px;
   max-height: 96px;
-  resize: vertical;
+  resize: none;
   padding: 0.6rem 0.75rem;
   border-radius: 10px;
   border: 1px solid var(--border);
@@ -92,6 +145,271 @@
   line-height: 1.4;
 }
 
+/* 홈 메인 달력만: 격자 간격 없이 한 줄 구분선, 기간 막대가 끊기지 않게 */
+.home__cal .calendar-grid.home__calendarGrid {
+  flex: 1;
+  min-height: 0;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bg);
+  grid-auto-rows: minmax(22px, 1fr);
+}
+
+.home__cal .calendar-grid.home__calendarGrid > .calendar-weekday {
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 0.4rem 0.2rem 0.35rem;
+  margin: 0;
+}
+
+.home__cal .calendar-grid.home__calendarGrid > .calendar-weekday:nth-child(7n) {
+  border-right: none;
+}
+
+.home__cal .calendar-grid.home__calendarGrid > .calendar-cell.home__calCell {
+  border: none;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.home__cal .calendar-grid.home__calendarGrid > .calendar-cell.home__calCell--rowEnd {
+  border-right: none;
+}
+
+.home__cal .calendar-grid.home__calendarGrid > .calendar-cell.home__calCell--lastRow {
+  border-bottom: none;
+}
+
+/* 주 단위 기간 막대(제목): 부모 7열과 동일 폭으로 이어짐 */
+.home__cal .calendar-grid.home__calendarGrid > .home__calWeekLanes {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  padding: 4px 0 3px;
+  row-gap: 3px;
+}
+
+.home__cal .home__calWeekLaneRow {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: stretch;
+  min-height: 22px;
+}
+
+@supports not (grid-template-columns: subgrid) {
+  .home__cal .home__calWeekLaneRow {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+}
+
+.home__cal .home__calRangeTitleBar {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding: 2px 6px;
+  border: 1px solid;
+  border-radius: 0;
+  box-sizing: border-box;
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1.2;
+  overflow: hidden;
+}
+
+.home__cal .home__calRangeTitleBar__text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.home__calCell {
+  min-height: 0;
+  height: 100%;
+  padding: 2px 1px 4px;
+  border-radius: 6px;
+}
+
+.home__panelEventBtn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  border-radius: 10px;
+  padding: 0.65rem 0.75rem;
+  margin-bottom: 0;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.home__panelEventBtn:hover {
+  border-color: var(--primary);
+  background: var(--surface);
+}
+
+.home__panelEventBtn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.home__rangePickHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.home__rangePickTitle {
+  font-weight: 700;
+  color: var(--primary);
+  flex: 1;
+  text-align: center;
+}
+
+.home__rangeEmbed {
+  padding: 0.65rem 0.5rem;
+  margin-top: 0.25rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+}
+
+.home__rangeEmbedSummary {
+  font-size: 0.88rem;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+}
+
+.home__rangeEmbedGrid {
+  margin-top: 0.25rem;
+}
+
+.home__rangeEmbedCell {
+  min-height: 48px;
+}
+
+.home__rangeEmbedCell--span {
+  background: rgba(255, 135, 161, 0.14);
+  border-color: rgba(255, 135, 161, 0.45);
+}
+
+.home__rangeEmbedCell--anchor {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary) inset;
+  font-weight: 800;
+}
+
+.home__repeatPreviewCell--hit {
+  background: rgba(139, 122, 184, 0.22);
+  border-color: rgba(139, 122, 184, 0.55);
+}
+
+.home__repeatPreviewCell--anchor {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary) inset;
+}
+
+.home__eventChips {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  margin-top: auto;
+  padding-top: 3px;
+  flex: 1;
+  min-height: 0;
+}
+
+.home__eventChip {
+  font-size: 0.62rem;
+  line-height: 1.2;
+  border-radius: 4px;
+  padding: 1px 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  text-align: left;
+}
+
+.home__typeRow {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: nowrap;
+}
+
+.home__typeRow--wrap {
+  flex-wrap: wrap;
+}
+
+.home__favRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.home__favRow--belowTitle {
+  margin-top: 0.45rem;
+}
+
+.home__favChip--plain {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.8rem;
+  padding: 0.25rem 0.65rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.home__favChip--plain:hover {
+  border-color: var(--primary);
+  background: rgba(255, 135, 161, 0.08);
+}
+
+.home__dateReadonly {
+  padding: 0.5rem 0.65rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.home__catRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.home__catChip {
+  border-radius: 999px;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.82rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+}
+
+
 button.calendar-cell {
   cursor: pointer;
   text-align: center;
@@ -118,6 +436,20 @@ button.calendar-cell {
   border-color: rgba(255, 99, 132, 0.6);
 }
 
+/* 홈 메인 달력: 테두리 격자와 맞춤 (위에서 border 제거됨) */
+.home__cal .calendar-grid.home__calendarGrid > .calendar-cell.today {
+  background: color-mix(in srgb, rgba(255, 135, 161, 0.9) 12%, transparent);
+}
+
+.home__cal .calendar-grid.home__calendarGrid > .calendar-cell.selected {
+  background: color-mix(in srgb, var(--primary) 16%, transparent);
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--primary) 45%, transparent);
+}
+
+.home__cal .calendar-grid.home__calendarGrid > .calendar-cell.period {
+  background: rgba(255, 99, 132, 0.16);
+}
+
 @media (orientation: landscape) {
   .home {
     display: grid;
@@ -137,7 +469,7 @@ button.calendar-cell {
   }
 
   .home__cal {
-    min-height: calc(100vh - 11rem);
+    min-height: 0;
   }
 
   .home__moods {

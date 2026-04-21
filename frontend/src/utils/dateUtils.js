@@ -67,3 +67,12 @@ export function buildMonthGridDays(viewYear, viewMonth) {
 export function formatYmdKey(year, month, day) {
   return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
 }
+
+/** YYYY-MM-DD 기준으로 연 수를 더한 날짜 키 (윤년·말일 보정은 Date가 처리) */
+export function addYearsToYmd(ymd, years) {
+  const [y, m, d] = String(ymd || '').split('-').map(Number)
+  if (!y || !m || !d) return ymd
+  const dt = new Date(y, m - 1, d)
+  dt.setFullYear(dt.getFullYear() + years)
+  return formatYmdKey(dt.getFullYear(), dt.getMonth(), dt.getDate())
+}
