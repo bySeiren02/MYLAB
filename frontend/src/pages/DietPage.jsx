@@ -521,6 +521,7 @@ export default function DietPage() {
 
   return (
     <div>
+      <div className="page-route-body">
       <div className='page-title-row'>
         <h1>몸</h1>
       </div>
@@ -530,7 +531,7 @@ export default function DietPage() {
       <div className='card'>
         <div className='form-group'>
           <label>체중(kg)</label>
-          <input value={weight} onChange={(e) => setWeight(e.target.value)} placeholder='예: 62.4' />
+          <input value={weight} onChange={(e) => setWeight(e.target.value)} placeholder='' />
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.5rem', marginTop: '0.5rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
           <div>섭취 {mealIntake} kcal</div>
@@ -571,7 +572,7 @@ export default function DietPage() {
               )
             })()}
             {(mealsByType[t.key] || []).length === 0 ? (
-              <div className='empty-state'>기록이 없습니다.</div>
+              <div className='empty-state' />
             ) : (
               (mealsByType[t.key] || []).map((m) => (
                 <div key={m.id} className='item-row'>
@@ -602,7 +603,7 @@ export default function DietPage() {
         </div>
       </div>
       {exerciseEntries.length === 0 ? (
-        <div className='empty-state'>운동 기록이 없습니다.</div>
+        <div className='empty-state' />
       ) : (
         exerciseEntries.map((e) => (
           <div key={e.id} className='item-row'>
@@ -686,7 +687,7 @@ export default function DietPage() {
       </div>
 
       {runningLogs.length === 0 ? (
-        <div className='empty-state'>러닝 기록이 없습니다.</div>
+        <div className='empty-state' />
       ) : (
         runningLogs.map((l) => (
           <div key={l.id} className='item-row'>
@@ -695,7 +696,6 @@ export default function DietPage() {
               <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
                 평균 페이스: {l.paceMinPerKm ? `${Number(l.paceMinPerKm).toFixed(2)} 분/km` : '-'}
               </div>
-              {l.isMock && <div style={{ color: 'var(--text-muted)', fontSize: '0.82rem' }}>샘플 기록</div>}
               {l.endLocation && (
                 <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
                   종료 위치: {Number(l.endLocation.lat).toFixed(6)}, {Number(l.endLocation.lng).toFixed(6)}
@@ -720,13 +720,14 @@ export default function DietPage() {
           </div>
         ))
       )}
+      </div>
 
       {showCaptureModal && (
         <div className='modal-overlay' role='dialog' aria-modal='true'>
           <div className='modal' style={{ maxWidth: 640 }}>
             <h2 style={{ marginBottom: '0.75rem' }}>러닝 캡처 카드</h2>
             {!captureData ? (
-              <div className='empty-state'>캡처할 러닝 데이터가 없습니다.</div>
+              <div className='empty-state' />
             ) : (
               <div ref={captureCardRef} className='card' style={{ marginBottom: '0.75rem' }}>
                 <div style={{ position: 'relative' }}>
@@ -778,10 +779,7 @@ export default function DietPage() {
             <h2 style={{ marginBottom: '0.75rem' }}>운동 루틴 만들기</h2>
             <div className='form-group'>
               <label>루틴 이름</label>
-              <input value={newRoutineName} onChange={(e) => setNewRoutineName(e.target.value)} placeholder='예: 하체 루틴' />
-            </div>
-            <div style={{ marginBottom: '0.75rem', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-              운동 이름과 횟수만 입력하면, 운동명 기준으로 회당 칼로리를 자동 추정해 총 소모 칼로리를 계산합니다.
+              <input value={newRoutineName} onChange={(e) => setNewRoutineName(e.target.value)} placeholder='' />
             </div>
             <div style={{ display: 'grid', gap: '0.5rem' }}>
               {routineItems.map((item, idx) => (
@@ -807,7 +805,7 @@ export default function DietPage() {
                           routineItems.map((x) => (x.id === item.id ? { ...x, name: e.target.value } : x)),
                         )
                       }
-                      placeholder='예: 스쿼트'
+                      placeholder=''
                     />
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
@@ -867,7 +865,7 @@ export default function DietPage() {
           <div className='modal'>
             <h2 style={{ marginBottom: '0.75rem' }}>루틴 추가</h2>
             {exerciseRoutines.length === 0 ? (
-              <div className='empty-state'>저장된 루틴이 없습니다. 먼저 루틴을 만들어 주세요.</div>
+              <div className='empty-state' />
             ) : (
               exerciseRoutines.map((r) => (
                 <div key={r.id} className='item-row'>

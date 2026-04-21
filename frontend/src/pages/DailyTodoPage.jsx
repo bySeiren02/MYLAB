@@ -79,37 +79,41 @@ export default function DailyTodoPage() {
 
   return (
     <div>
-      <div className="page-title-row">
-        <h1>데일리 투두</h1>
-        <button type="button" className="btn btn-secondary" onClick={() => setShowRoutine(true)}>
-          루틴 관리
-        </button>
-      </div>
-
-      <CompactCalendar currentDate={currentDate} selectedDate={currentDate} highlightDates={highlightDates} onDateChange={(d) => setCurrentDate(d)} />
-
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>
-        <input className="form-group" style={{ flex: 1, padding: '0.65rem 0.75rem', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text)' }} value={text} onChange={(e) => setText(e.target.value)} placeholder="할 일을 입력" onKeyDown={(e) => e.key === 'Enter' && add()} />
-        <button type="button" className="btn btn-primary" onClick={add}>
-          추가
-        </button>
-      </div>
-
-      {todos.length === 0 ? (
-        <div className="empty-state">할 일이 없습니다.</div>
-      ) : (
-        <div>
-          {todos.map((t) => (
-            <div key={t.id} className="item-row">
-              <input type="checkbox" checked={!!t.completed} onChange={() => toggle(t.id)} />
-              <input type="text" value={t.text} onChange={(e) => persist(todos.map((x) => (x.id === t.id ? { ...x, text: e.target.value } : x)))} style={{ textDecoration: t.completed ? 'line-through' : 'none', opacity: t.completed ? 0.65 : 1 }} />
-              <button type="button" className="btn btn-danger" onClick={() => remove(t.id)}>
-                삭제
-              </button>
-            </div>
-          ))}
+      <div className="page-route-body">
+        <div className="page-title-row">
+          <h1>투두리스트</h1>
+          <button type="button" className="btn btn-secondary" onClick={() => setShowRoutine(true)}>
+            루틴 관리
+          </button>
         </div>
-      )}
+
+        <CompactCalendar currentDate={currentDate} selectedDate={currentDate} highlightDates={highlightDates} onDateChange={(d) => setCurrentDate(d)} />
+
+        <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
+          <input className="form-group" style={{ flex: 1, padding: '0.65rem 0.75rem', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text)' }} value={text} onChange={(e) => setText(e.target.value)} placeholder="" onKeyDown={(e) => e.key === 'Enter' && add()} />
+          <button type="button" className="btn btn-primary" onClick={add}>
+            추가
+          </button>
+        </div>
+
+        <div className="page-route-body__grow">
+          {todos.length === 0 ? (
+            <div className="empty-state" />
+          ) : (
+            <div style={{ minHeight: 0 }}>
+              {todos.map((t) => (
+                <div key={t.id} className="item-row">
+                  <input type="checkbox" checked={!!t.completed} onChange={() => toggle(t.id)} />
+                  <input type="text" value={t.text} onChange={(e) => persist(todos.map((x) => (x.id === t.id ? { ...x, text: e.target.value } : x)))} style={{ textDecoration: t.completed ? 'line-through' : 'none', opacity: t.completed ? 0.65 : 1 }} />
+                  <button type="button" className="btn btn-danger" onClick={() => remove(t.id)}>
+                    삭제
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
 
       {showRoutine && (
         <div className="modal-overlay" role="dialog" aria-modal="true">
@@ -120,7 +124,7 @@ export default function DailyTodoPage() {
                 style={{ flex: 1, padding: '0.65rem 0.75rem', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)' }}
                 value={routineText}
                 onChange={(e) => setRoutineText(e.target.value)}
-                placeholder="매일 반복할 항목"
+                placeholder=""
                 onKeyDown={(e) => e.key === 'Enter' && addRoutine()}
               />
               <button type="button" className="btn btn-primary" onClick={addRoutine}>

@@ -7,8 +7,10 @@ import 'leaflet/dist/leaflet.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <div className="app-viewport">
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </div>
   </React.StrictMode>,
 )

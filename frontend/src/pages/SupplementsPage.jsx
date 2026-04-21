@@ -67,47 +67,53 @@ export default function SupplementsPage() {
 
   return (
     <div>
-      <div className="page-title-row">
-        <h1>영양제</h1>
-        <button type="button" className="btn btn-secondary" onClick={() => setShowRoutine(true)}>
-          루틴 관리
-        </button>
-      </div>
-
-      <CompactCalendar currentDate={currentDate} selectedDate={currentDate} highlightDates={highlightDates} onDateChange={(d) => setCurrentDate(d)} />
-
-      {items.length > 0 && (
-        <div className="card" style={{ marginBottom: '0.75rem' }}>
-          복용 체크: {taken} / {items.length}
+      <div className="page-route-body">
+        <div className="page-title-row">
+          <h1>영양제</h1>
+          <button type="button" className="btn btn-secondary" onClick={() => setShowRoutine(true)}>
+            루틴 관리
+          </button>
         </div>
-      )}
 
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>
-        <input
-          style={{ flex: 1, padding: '0.65rem 0.75rem', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text)' }}
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="영양제 이름"
-          onKeyDown={(e) => e.key === 'Enter' && add()}
-        />
-        <button type="button" className="btn btn-primary" onClick={add}>
-          추가
-        </button>
-      </div>
+        <CompactCalendar currentDate={currentDate} selectedDate={currentDate} highlightDates={highlightDates} onDateChange={(d) => setCurrentDate(d)} />
 
-      {items.length === 0 ? (
-        <div className="empty-state">항목이 없습니다.</div>
-      ) : (
-        items.map((x) => (
-          <div key={x.id} className="item-row">
-            <input type="checkbox" checked={!!x.taken} onChange={() => toggle(x.id)} />
-            <input type="text" value={x.name} onChange={(e) => persist(items.map((t) => (t.id === x.id ? { ...t, name: e.target.value } : t)))} />
-            <button type="button" className="btn btn-danger" onClick={() => remove(x.id)}>
-              삭제
-            </button>
+        {items.length > 0 && (
+          <div className="card" style={{ margin: 0, flexShrink: 0 }}>
+            복용 체크: {taken} / {items.length}
           </div>
-        ))
-      )}
+        )}
+
+        <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
+          <input
+            style={{ flex: 1, padding: '0.65rem 0.75rem', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text)' }}
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder=""
+            onKeyDown={(e) => e.key === 'Enter' && add()}
+          />
+          <button type="button" className="btn btn-primary" onClick={add}>
+            추가
+          </button>
+        </div>
+
+        <div className="page-route-body__grow">
+          {items.length === 0 ? (
+            <div className="empty-state" />
+          ) : (
+            <div style={{ minHeight: 0 }}>
+              {items.map((x) => (
+                <div key={x.id} className="item-row">
+                  <input type="checkbox" checked={!!x.taken} onChange={() => toggle(x.id)} />
+                  <input type="text" value={x.name} onChange={(e) => persist(items.map((t) => (t.id === x.id ? { ...t, name: e.target.value } : t)))} />
+                  <button type="button" className="btn btn-danger" onClick={() => remove(x.id)}>
+                    삭제
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
 
       {showRoutine && (
         <div className="modal-overlay" role="dialog" aria-modal="true">

@@ -5,38 +5,78 @@ import { getStorage, setStorage } from '../utils/storage'
 export default function SignupPage() {
   const navigate = useNavigate()
   const [nickname, setNickname] = useState('')
-  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [gender, setGender] = useState('female')
   const [error, setError] = useState('')
 
   const onSubmit = (e) => {
     e.preventDefault()
-    const users = getStorage('users', [])
-    if (users.some((u) => u.email === email.trim())) {
-      setError('이미 사용 중인 이메일입니다.')
+    const id = username.trim()
+    if (!id) {
+      setError('아이디를 입력해 주세요.')
       return
     }
-    const newUser = { id: Date.now(), nickname: nickname.trim(), email: email.trim(), password }
+    const users = getStorage('users', [])
+    if (users.some((u) => (u.username || u.email) === id)) {
+      setError('이미 사용 중인 아이디입니다.')
+      return
+    }
+    const newUser = {
+      id: Date.now(),
+      nickname: nickname.trim() || id,
+      username: id,
+      password,
+      gender,
+    }
     setStorage('users', [...users, newUser])
-    setStorage('current_user', { email: newUser.email, nickname: newUser.nickname })
+    setStorage('current_user', {
+      username: newUser.username,
+      nickname: newUser.nickname,
+      gender: newUser.gender,
+    })
     navigate('/', { replace: true })
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', padding: '1rem' }}>
+    <div
+      style={{
+        flex: 1,
+        minHeight: 0,
+        overflow: 'hidden',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding:
+          'max(1rem, env(safe-area-inset-top, 0px)) max(1rem, env(safe-area-inset-right, 0px)) max(1rem, env(safe-area-inset-bottom, 0px)) max(1rem, env(safe-area-inset-left, 0px))',
+      }}
+    >
       <form className="card" style={{ width: '100%', maxWidth: 420 }} onSubmit={onSubmit}>
         <h1 style={{ marginBottom: '1rem' }}>회원가입</h1>
         <div className="form-group">
           <label>닉네임</label>
-          <input value={nickname} onChange={(e) => setNickname(e.target.value)} required />
+          <input value={nickname} onChange={(e) => setNickname(e.target.value)} placeholder="표시 이름 (비워두면 아이디와 동일)" />
         </div>
         <div className="form-group">
-          <label>이메일</label>
-          <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" required />
+          <label>아이디</label>
+          <input value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="username" required />
         </div>
         <div className="form-group">
           <label>비밀번호</label>
-          <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" required />
+          <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" autoComplete="new-password" required />
+        </div>
+        <div className="form-group">
+          <label>성별</label>
+          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+            <label style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', cursor: 'pointer' }}>
+              <input type="radio" name="gender" value="female" checked={gender === 'female'} onChange={() => setGender('female')} />
+              여자
+            </label>
+            <label style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', cursor: 'pointer' }}>
+              <input type="radio" name="gender" value="male" checked={gender === 'male'} onChange={() => setGender('male')} />
+              남자
+            </label>
+          </div>
         </div>
         {error && <div className="error-message">{error}</div>}
         <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '0.5rem' }}>

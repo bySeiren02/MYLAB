@@ -80,6 +80,7 @@ export default function DatePage() {
 
   return (
     <div>
+      <div className="page-route-body">
       <div className="page-title-row">
         <h1>데이트</h1>
       </div>
@@ -107,27 +108,25 @@ export default function DatePage() {
         <div style={{ fontWeight: 700, marginBottom: '0.75rem' }}>{formatDate(currentDate)} 데이트 기록</div>
         <div className="form-group">
           <label>장소</label>
-          <input value={record.place} onChange={(e) => saveRecord({ ...record, place: e.target.value })} placeholder="어디서 만났는지" />
+          <input value={record.place} onChange={(e) => saveRecord({ ...record, place: e.target.value })} placeholder="" />
         </div>
         <div className="form-group">
           <label>식당</label>
-          <input value={record.restaurant} onChange={(e) => saveRecord({ ...record, restaurant: e.target.value })} placeholder="어디서 먹었는지" />
+          <input value={record.restaurant} onChange={(e) => saveRecord({ ...record, restaurant: e.target.value })} placeholder="" />
         </div>
         <div className="form-group">
           <label>기분</label>
-          <input value={record.mood} onChange={(e) => saveRecord({ ...record, mood: e.target.value })} placeholder="오늘 기분" />
+          <input value={record.mood} onChange={(e) => saveRecord({ ...record, mood: e.target.value })} placeholder="" />
         </div>
         <div className="form-group">
           <label>메모</label>
-          <textarea value={record.notes} onChange={(e) => saveRecord({ ...record, notes: e.target.value })} placeholder="특별한 일, 선물, 기억하고 싶은 것" />
+          <textarea value={record.notes} onChange={(e) => saveRecord({ ...record, notes: e.target.value })} placeholder="" />
         </div>
       </div>
 
       {relationshipStart && (
         <div className="card">
-          <div style={{ fontWeight: 700, marginBottom: '0.5rem' }}>기념일 안내</div>
-          <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>달력에서 하이라이트된 날짜가 100일/200일/300일/400일... 기념일입니다.</div>
-          <div style={{ marginTop: '0.6rem', display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
             {ANNIVERSARY_DAYS.map((n, i) => (
               <span key={n} style={{ border: '1px solid var(--border)', borderRadius: 999, padding: '0.25rem 0.55rem', fontSize: '0.8rem' }}>
                 {n}일: {anniversaryKeys[i]}
@@ -136,6 +135,7 @@ export default function DatePage() {
           </div>
         </div>
       )}
+      </div>
     </div>
   )
 }

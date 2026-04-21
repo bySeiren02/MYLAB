@@ -155,7 +155,7 @@ button {
 
 .form-group textarea {
   min-height: 120px;
-  resize: vertical;
+  resize: none;
 }
 
 .error-message {
@@ -228,4 +228,76 @@ button {
 
 .calendar-cell.dim {
   opacity: 0.45;
+}
+
+/* 한 화면 고정: 문서 스크롤 없음, 라우트 영역만 뷰포트에 맞춤 */
+html {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+#root {
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.app-viewport {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.app-routes-fill {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.app-routes-fill > * {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/**
+ * 페이지 본문: 상단 제목·컨트롤 아래 남는 높이를 쓰고 넘치면 잘림(스크롤 없음)
+ */
+.page-route-body {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.page-route-body__grow {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }

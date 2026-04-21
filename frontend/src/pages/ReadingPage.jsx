@@ -51,45 +51,51 @@ export default function ReadingPage() {
 
   return (
     <div>
-      <div className="page-title-row">
-        <h1>독서</h1>
-        <button type="button" className="btn btn-primary" onClick={openNew}>
-          추가
-        </button>
-      </div>
+      <div className="page-route-body">
+        <div className="page-title-row">
+          <h1>독서</h1>
+          <button type="button" className="btn btn-primary" onClick={openNew}>
+            추가
+          </button>
+        </div>
 
-      <CompactCalendar currentDate={currentDate} selectedDate={currentDate} highlightDates={highlightDates} onDateChange={(d) => setCurrentDate(d)} />
+        <CompactCalendar currentDate={currentDate} selectedDate={currentDate} highlightDates={highlightDates} onDateChange={(d) => setCurrentDate(d)} />
 
-      <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
-        선택한 날짜({dateKey})에 기록됩니다.
-      </div>
+        <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', flexShrink: 0 }}>
+          선택한 날짜({dateKey})에 기록됩니다. 소설·웹툰 같은 이야기 감상은 <strong>감상 기록 → 소설·웹툰</strong>을 써도 돼요.
+        </div>
 
-      {books.length === 0 ? (
-        <div className="empty-state">기록이 없습니다.</div>
-      ) : (
-        books.map((b) => (
-          <div key={b.id} className="card">
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.75rem' }}>
-              <div style={{ flex: 1 }}>
-                <div className="card-title">{b.title}</div>
-                <div className="card-meta">
-                  {b.author && <span>{b.author} · </span>}
-                  상태: {b.status}
+        <div className="page-route-body__grow">
+          {books.length === 0 ? (
+            <div className="empty-state" />
+          ) : (
+            <div style={{ minHeight: 0 }}>
+              {books.map((b) => (
+                <div key={b.id} className="card">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.75rem' }}>
+                    <div style={{ flex: 1 }}>
+                      <div className="card-title">{b.title}</div>
+                      <div className="card-meta">
+                        {b.author && <span>{b.author} · </span>}
+                        상태: {b.status}
+                      </div>
+                      {b.review && <div className="card-content">{b.review}</div>}
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                      <button type="button" className="btn btn-secondary" onClick={() => openEdit(b)}>
+                        수정
+                      </button>
+                      <button type="button" className="btn btn-danger" onClick={() => remove(b.id)}>
+                        삭제
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                {b.review && <div className="card-content">{b.review}</div>}
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <button type="button" className="btn btn-secondary" onClick={() => openEdit(b)}>
-                  수정
-                </button>
-                <button type="button" className="btn btn-danger" onClick={() => remove(b.id)}>
-                  삭제
-                </button>
-              </div>
+              ))}
             </div>
-          </div>
-        ))
-      )}
+          )}
+        </div>
+      </div>
 
       {modal && (
         <div className="modal-overlay" role="dialog" aria-modal="true">

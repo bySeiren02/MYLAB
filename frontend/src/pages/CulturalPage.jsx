@@ -3,7 +3,7 @@ import { getStorage, setStorage, listStorageKeysByPrefix } from '../utils/storag
 import { useDateNavigation } from '../hooks/useDateNavigation'
 import CompactCalendar from '../components/CompactCalendar'
 
-const types = ['영화', '연극', '뮤지컬', '전시회', '기타']
+const types = ['전시회', '페스티벌', '기타']
 
 export default function CulturalPage() {
   const { currentDate, setCurrentDate, dateKey } = useDateNavigation()
@@ -59,40 +59,50 @@ export default function CulturalPage() {
 
   return (
     <div>
-      <div className="page-title-row">
-        <h1>문화생활</h1>
-        <button type="button" className="btn btn-primary" onClick={openNew}>
-          추가
-        </button>
-      </div>
+      <div className="page-route-body">
+        <div className="page-title-row">
+          <h1>전시·나들이</h1>
+          <button type="button" className="btn btn-primary" onClick={openNew}>
+            추가
+          </button>
+        </div>
 
-      <CompactCalendar currentDate={currentDate} selectedDate={currentDate} highlightDates={highlightDates} onDateChange={(d) => setCurrentDate(d)} />
+        <CompactCalendar currentDate={currentDate} selectedDate={currentDate} highlightDates={highlightDates} onDateChange={(d) => setCurrentDate(d)} />
 
-      {records.length === 0 ? (
-        <div className="empty-state">기록이 없습니다.</div>
-      ) : (
-        records.map((r) => (
-          <div key={r.id} className="card">
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.75rem' }}>
-              <div style={{ flex: 1 }}>
-                <div className="card-title">{r.title}</div>
-                <div className="card-meta">{r.type}</div>
-                {r.location && <div className="card-meta">장소: {r.location}</div>}
-                {r.withWhom && <div className="card-meta">함께: {r.withWhom}</div>}
-                {r.thoughts && <div className="card-content">{r.thoughts}</div>}
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <button type="button" className="btn btn-secondary" onClick={() => openEdit(r)}>
-                  수정
-                </button>
-                <button type="button" className="btn btn-danger" onClick={() => remove(r.id)}>
-                  삭제
-                </button>
-              </div>
+        <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', flexShrink: 0 }}>
+          전시·축제 등 밖에서 즐긴 문화 나들이는 여기, 공연·영상은 <strong>감상 기록 → 시청·공연</strong>으로 나눠도 좋아요.
+        </div>
+
+        <div className="page-route-body__grow">
+          {records.length === 0 ? (
+            <div className="empty-state" />
+          ) : (
+            <div style={{ minHeight: 0 }}>
+              {records.map((r) => (
+                <div key={r.id} className="card">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.75rem' }}>
+                    <div style={{ flex: 1 }}>
+                      <div className="card-title">{r.title}</div>
+                      <div className="card-meta">{r.type}</div>
+                      {r.location && <div className="card-meta">장소: {r.location}</div>}
+                      {r.withWhom && <div className="card-meta">함께: {r.withWhom}</div>}
+                      {r.thoughts && <div className="card-content">{r.thoughts}</div>}
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                      <button type="button" className="btn btn-secondary" onClick={() => openEdit(r)}>
+                        수정
+                      </button>
+                      <button type="button" className="btn btn-danger" onClick={() => remove(r.id)}>
+                        삭제
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-          </div>
-        ))
-      )}
+          )}
+        </div>
+      </div>
 
       {modal && (
         <div className="modal-overlay" role="dialog" aria-modal="true">
@@ -101,7 +111,7 @@ export default function CulturalPage() {
             <div className="form-group">
               <label>유형</label>
               <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })}>
-                {types.map((t) => (
+                {[...new Set([...types, form.type].filter(Boolean))].map((t) => (
                   <option key={t} value={t}>
                     {t}
                   </option>

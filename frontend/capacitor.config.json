@@ -1,6 +1,6 @@
 {
-  "appId": "com.basiccrud.app",
-  "appName": "Basic CRUD",
+  "appId": "com.byseiren.mylab",
+  "appName": "MyLab",
   "webDir": "dist",
   "server": {
     "androidScheme": "https"

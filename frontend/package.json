@@ -12,12 +12,12 @@
     "preview": "vite preview",
     "cap:sync": "npx cap sync ios",
     "ios:open": "npx cap open ios",
-    "ios:build": "npm run build && npm run cap:sync"
+    "ios:build": "npm run build && npm run cap:sync",
+    "mobile:ios": "npm run build && npx cap sync ios && npx cap open ios"
   },
   "dependencies": {
     "@capacitor/core": "^5.7.8",
     "@capacitor/ios": "^5.7.8",
-    "axios": "^1.6.2",
     "html2canvas": "^1.4.1",
     "leaflet": "^1.9.4",
     "react": "^18.2.0",

@@ -60,11 +60,12 @@ export default function DermatologyPage() {
 
   return (
     <div>
+      <div className="page-route-body">
       <div className="page-title-row">
         <h1>피부과</h1>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', marginBottom: '1rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', flexShrink: 0 }}>
         <button
           type="button"
           className="btn btn-secondary"
@@ -94,7 +95,7 @@ export default function DermatologyPage() {
         </button>
       </div>
 
-      <div style={{ display: 'grid', gap: '0.75rem' }}>
+      <div className="page-route-body__grow" style={{ display: 'grid', gap: '0.75rem', minHeight: 0 }}>
         {Array.from({ length: wcount }, (_, i) => i + 1).map((week) => {
           const data = visits[monthKey]?.[week]
           return (
@@ -118,6 +119,7 @@ export default function DermatologyPage() {
             </div>
           )
         })}
+      </div>
       </div>
 
       {modal && (

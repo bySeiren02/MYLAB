@@ -3,7 +3,7 @@ import { getStorage, listStorageKeysByPrefix, setStorage } from '../utils/storag
 import { useDateNavigation } from '../hooks/useDateNavigation'
 import CompactCalendar from '../components/CompactCalendar'
 
-const types = ['영화', '드라마']
+const types = ['영화', '드라마', '뮤지컬', '연극']
 
 export default function MovieDramaPage() {
   const { currentDate, setCurrentDate, dateKey } = useDateNavigation()
@@ -68,42 +68,52 @@ export default function MovieDramaPage() {
 
   return (
     <div>
-      <div className="page-title-row">
-        <h1>영화&드라마</h1>
-        <button type="button" className="btn btn-primary" onClick={openNew}>
-          추가
-        </button>
-      </div>
+      <div className="page-route-body">
+        <div className="page-title-row">
+          <h1>시청·공연</h1>
+          <button type="button" className="btn btn-primary" onClick={openNew}>
+            추가
+          </button>
+        </div>
 
-      <CompactCalendar currentDate={currentDate} selectedDate={currentDate} highlightDates={highlightDates} onDateChange={(d) => setCurrentDate(d)} />
+        <CompactCalendar currentDate={currentDate} selectedDate={currentDate} highlightDates={highlightDates} onDateChange={(d) => setCurrentDate(d)} />
 
-      {records.length === 0 ? (
-        <div className="empty-state">기록이 없습니다.</div>
-      ) : (
-        records.map((r) => (
-          <div key={r.id} className="card">
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.75rem' }}>
-              <div style={{ flex: 1 }}>
-                <div className="card-title">{r.title}</div>
-                <div className="card-meta">
-                  {r.type}
-                  {r.platform ? ` · ${r.platform}` : ''}
-                  {r.rating ? ` · 평점 ${r.rating}` : ''}
+        <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', flexShrink: 0 }}>
+          영화·드라마·뮤지컬·연극 등 본 공연·영상은 여기에 기록해요.
+        </div>
+
+        <div className="page-route-body__grow">
+          {records.length === 0 ? (
+            <div className="empty-state" />
+          ) : (
+            <div style={{ minHeight: 0 }}>
+              {records.map((r) => (
+                <div key={r.id} className="card">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.75rem' }}>
+                    <div style={{ flex: 1 }}>
+                      <div className="card-title">{r.title}</div>
+                      <div className="card-meta">
+                        {r.type}
+                        {r.platform ? ` · ${r.platform}` : ''}
+                        {r.rating ? ` · 평점 ${r.rating}` : ''}
+                      </div>
+                      {r.review && <div className="card-content">{r.review}</div>}
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                      <button type="button" className="btn btn-secondary" onClick={() => openEdit(r)}>
+                        수정
+                      </button>
+                      <button type="button" className="btn btn-danger" onClick={() => remove(r.id)}>
+                        삭제
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                {r.review && <div className="card-content">{r.review}</div>}
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <button type="button" className="btn btn-secondary" onClick={() => openEdit(r)}>
-                  수정
-                </button>
-                <button type="button" className="btn btn-danger" onClick={() => remove(r.id)}>
-                  삭제
-                </button>
-              </div>
+              ))}
             </div>
-          </div>
-        ))
-      )}
+          )}
+        </div>
+      </div>
 
       {modal && (
         <div className="modal-overlay" role="dialog" aria-modal="true">
@@ -112,7 +122,7 @@ export default function MovieDramaPage() {
             <div className="form-group">
               <label>유형</label>
               <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })}>
-                {types.map((t) => (
+                {[...new Set([...types, form.type].filter(Boolean))].map((t) => (
                   <option key={t} value={t}>
                     {t}
                   </option>
@@ -129,7 +139,7 @@ export default function MovieDramaPage() {
             </div>
             <div className="form-group">
               <label>평점</label>
-              <input value={form.rating} onChange={(e) => setForm({ ...form, rating: e.target.value })} placeholder="예: 4.5/5" />
+              <input value={form.rating} onChange={(e) => setForm({ ...form, rating: e.target.value })} placeholder="" />
             </div>
             <div className="form-group">
               <label>메모</label>

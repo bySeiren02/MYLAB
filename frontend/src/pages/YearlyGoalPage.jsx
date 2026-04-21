@@ -28,46 +28,52 @@ export default function YearlyGoalPage() {
 
   return (
     <div>
-      <div className="page-title-row">
-        <h1>연 목표</h1>
-      </div>
+      <div className="page-route-body">
+        <div className="page-title-row">
+          <h1>연 목표</h1>
+        </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', marginBottom: '1rem' }}>
-        <button type="button" className="btn btn-secondary" onClick={goToPrevious}>
-          ‹
-        </button>
-        <div style={{ fontWeight: 800, color: 'var(--primary)' }}>{formatYearLabel(currentYear)}</div>
-        <button type="button" className="btn btn-secondary" onClick={goToNext}>
-          ›
-        </button>
-      </div>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', flexShrink: 0 }}>
+          <button type="button" className="btn btn-secondary" onClick={goToPrevious}>
+            ‹
+          </button>
+          <div style={{ fontWeight: 800, color: 'var(--primary)' }}>{formatYearLabel(currentYear)}</div>
+          <button type="button" className="btn btn-secondary" onClick={goToNext}>
+            ›
+          </button>
+        </div>
 
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>
-        <input
-          style={{ flex: 1, padding: '0.65rem 0.75rem', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text)' }}
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="연 목표 입력"
-          onKeyDown={(e) => e.key === 'Enter' && add()}
-        />
-        <button type="button" className="btn btn-primary" onClick={add}>
-          추가
-        </button>
-      </div>
+        <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
+          <input
+            style={{ flex: 1, padding: '0.65rem 0.75rem', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text)' }}
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder=""
+            onKeyDown={(e) => e.key === 'Enter' && add()}
+          />
+          <button type="button" className="btn btn-primary" onClick={add}>
+            추가
+          </button>
+        </div>
 
-      {goals.length === 0 ? (
-        <div className="empty-state">목표가 없습니다.</div>
-      ) : (
-        goals.map((g) => (
-          <div key={g.id} className="item-row">
-            <input type="checkbox" checked={!!g.completed} onChange={() => toggle(g.id)} />
-            <input type="text" value={g.text} onChange={(e) => persist(goals.map((x) => (x.id === g.id ? { ...x, text: e.target.value } : x)))} style={{ textDecoration: g.completed ? 'line-through' : 'none' }} />
-            <button type="button" className="btn btn-danger" onClick={() => remove(g.id)}>
-              삭제
-            </button>
-          </div>
-        ))
-      )}
+        <div className="page-route-body__grow">
+          {goals.length === 0 ? (
+            <div className="empty-state" />
+          ) : (
+            <div style={{ minHeight: 0 }}>
+              {goals.map((g) => (
+                <div key={g.id} className="item-row">
+                  <input type="checkbox" checked={!!g.completed} onChange={() => toggle(g.id)} />
+                  <input type="text" value={g.text} onChange={(e) => persist(goals.map((x) => (x.id === g.id ? { ...x, text: e.target.value } : x)))} style={{ textDecoration: g.completed ? 'line-through' : 'none' }} />
+                  <button type="button" className="btn btn-danger" onClick={() => remove(g.id)}>
+                    삭제
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   )
 }

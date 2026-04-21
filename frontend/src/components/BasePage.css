@@ -1,20 +1,47 @@
 .app-shell {
-  min-height: 100vh;
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   background: var(--bg);
+  overflow: hidden;
 }
 
 .app-main {
   flex: 1;
-  padding: 1rem max(env(safe-area-inset-right, 0px), 0.7rem) calc(5.5rem + env(safe-area-inset-bottom, 0px)) max(env(safe-area-inset-left, 0px), 0.7rem);
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-top: max(1rem, env(safe-area-inset-top, 0px));
+  padding-right: max(env(safe-area-inset-right, 0px), 0.7rem);
   padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+  padding-left: max(env(safe-area-inset-left, 0px), 0.7rem);
   max-width: none;
   margin: 0;
   width: 100%;
 }
 
+.app-page {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.app-page > * {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
 .top-user-bar {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -32,6 +59,7 @@
 }
 
 .page-title-row {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -58,11 +86,23 @@
   right: 0;
   bottom: calc(4.25rem + env(safe-area-inset-bottom, 0px));
   max-height: 55vh;
-  overflow: auto;
+  max-height: min(55vh, 55dvh);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
   background: var(--surface);
   border-top: 1px solid var(--border);
   padding: 1rem;
   z-index: 50;
+}
+
+.dock-panel__body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .modal-overlay {
@@ -72,19 +112,203 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding: max(1rem, env(safe-area-inset-top, 0px)) max(1rem, env(safe-area-inset-right, 0px))
+    max(1rem, env(safe-area-inset-bottom, 0px)) max(1rem, env(safe-area-inset-left, 0px));
   z-index: 3000;
 }
 
 .modal {
   width: 100%;
   max-width: 520px;
-  max-height: 90vh;
-  overflow: auto;
+  max-height: min(90vh, 90dvh);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 1.25rem;
+}
+
+.settings-modal {
+  max-height: min(92vh, 720px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.settings-modal-body {
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+  padding-right: 0.15rem;
+}
+
+.settings-modal-footer {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.settings-nav-list {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.settings-nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  text-align: left;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.settings-nav-item:hover {
+  border-color: var(--primary);
+}
+
+.settings-nav-chevron {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.settings-sub-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-shrink: 0;
+}
+
+.settings-sub-head h2 {
+  margin: 0;
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.settings-menu-title {
+  margin: 0 0 1rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* 설정 > 화면 — 글씨 크기 */
+.settings-font-size {
+  margin-bottom: 1rem;
+}
+
+.settings-font-size__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.55rem;
+}
+
+.settings-font-size__title {
+  font-weight: 500;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+.settings-font-size__badge {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 0.82rem;
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+  color: var(--primary);
+  border: 1px solid color-mix(in srgb, var(--primary) 42%, var(--border));
+  background: color-mix(in srgb, var(--primary) 14%, transparent);
+}
+
+.settings-font-size__sliderWrap {
+  width: 100%;
+  margin-bottom: 0.85rem;
+}
+
+.settings-font-size__range {
+  display: block;
+  width: 100%;
+  height: 40px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+}
+
+.settings-font-size__range:focus {
+  outline: none;
+}
+
+.settings-font-size__range:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 40%, transparent);
+}
+
+.settings-font-size__range::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--primary) 0%,
+    var(--primary) var(--font-size-fill, 50%),
+    var(--border) var(--font-size-fill, 50%),
+    var(--border) 100%
+  );
+}
+
+.settings-font-size__range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  margin-top: -7px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 3px solid var(--primary);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.22);
+  cursor: grab;
+}
+
+.settings-font-size__range:active::-webkit-slider-thumb {
+  cursor: grabbing;
+}
+
+.settings-font-size__range::-moz-range-track {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--border);
+}
+
+.settings-font-size__range::-moz-range-progress {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--primary);
+}
+
+.settings-font-size__range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: 0 0 0 3px var(--primary), 0 2px 8px rgba(0, 0, 0, 0.2);
+  cursor: grab;
 }
 
 .item-row {
@@ -114,6 +338,7 @@
 
 @media (orientation: portrait) {
   .app-main {
+    padding-top: max(1rem, env(safe-area-inset-top, 0px));
     padding-left: max(env(safe-area-inset-left, 0px), 0.7rem);
     padding-right: max(env(safe-area-inset-right, 0px), 0.7rem);
   }
@@ -122,7 +347,9 @@
 @media (orientation: landscape) {
   .app-main {
     max-width: 100%;
-    padding: 0.7rem 0.9rem;
+    padding-top: max(0.7rem, env(safe-area-inset-top, 0px));
+    padding-right: max(0.9rem, env(safe-area-inset-right, 0px));
+    padding-left: max(0.9rem, env(safe-area-inset-left, 0px));
     padding-bottom: calc(4.6rem + env(safe-area-inset-bottom, 0px));
   }
 

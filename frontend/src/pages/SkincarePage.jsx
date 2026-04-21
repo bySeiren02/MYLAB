@@ -35,11 +35,12 @@ export default function SkincarePage() {
 
   return (
     <div>
-      <div className="page-title-row">
-        <h1>피부관리</h1>
-      </div>
+      <div className="page-route-body">
+        <div className="page-title-row">
+          <h1>피부관리</h1>
+        </div>
 
-      <div style={{ display: 'grid', gap: '0.75rem' }}>
+        <div className="page-route-body__grow" style={{ display: 'grid', gap: '0.75rem', minHeight: 0 }}>
         {days.map((day) => (
           <div key={day} className="card" style={{ margin: 0 }}>
             <div style={{ fontWeight: 800, marginBottom: '0.5rem' }}>
@@ -50,7 +51,7 @@ export default function SkincarePage() {
                 style={{ flex: 1, padding: '0.6rem 0.75rem', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)' }}
                 value={draft[day] || ''}
                 onChange={(e) => setDraft({ ...draft, [day]: e.target.value })}
-                placeholder="루틴 항목"
+                placeholder=""
                 onKeyDown={(e) => e.key === 'Enter' && add(day)}
               />
               <button type="button" className="btn btn-primary" onClick={() => add(day)}>
@@ -72,6 +73,7 @@ export default function SkincarePage() {
             )}
           </div>
         ))}
+        </div>
       </div>
     </div>
   )
