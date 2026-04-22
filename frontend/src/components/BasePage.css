@@ -59,6 +59,11 @@
   overflow: visible;
 }
 
+/* L(악센트) 위에 M이 또렷하게 보이도록 밝은 선 */
+.app-brand-mark__m {
+  stroke: color-mix(in srgb, #fff 88%, var(--bg) 12%);
+}
+
 .top-user-bar {
   flex-shrink: 0;
   display: flex;

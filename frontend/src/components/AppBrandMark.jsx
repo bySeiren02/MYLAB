@@ -1,5 +1,5 @@
 /**
- * 앱 안에서 보이는 마크: 큰 L 안쪽(아래 모서리)에 작은 M을 둔 형태
+ * 앱 안 마크: iOS 아이콘과 같은 비율 — 얇은 L + 발 위에 또렷한 M
  */
 export default function AppBrandMark({ size = 40 }) {
   const s = Math.max(28, Math.min(56, size))
@@ -12,19 +12,16 @@ export default function AppBrandMark({ size = 40 }) {
         height="100%"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {/* 굵은 L: 왼쪽 세로 + 아래 가로 (모서리만 살짝 둥글게) */}
+        {/* 얇은 L (세로 + 발) */}
+        <path fill="currentColor" d="M14 60L14 11L19 11L19 37L62 37L62 43L14 43Z" />
+        {/* M — 발 위·안쪽, 지그재그 */}
         <path
-          fill="currentColor"
-          d="M14 72L14 14Q14 10 18 10L34 10Q38 10 38 14L38 48Q38 50 40 50L66 50Q70 50 70 54L70 70Q70 72 68 72L14 72Z"
-        />
-        {/* L 안쪽 아래 모서리 위에 얹은 작은 M (지그재그, 선만) */}
-        <path
+          className="app-brand-mark__m"
           fill="none"
-          stroke="currentColor"
-          strokeWidth="4.2"
+          strokeWidth="2.4"
           strokeLinecap="round"
           strokeLinejoin="round"
-          d="M 40 64 L 46 48 L 52 64 L 58 48 L 64 64"
+          d="M21 42l3.8-10.5 3.8 10.5 3.8-10.5 3.8 10.5"
         />
       </svg>
     </div>
