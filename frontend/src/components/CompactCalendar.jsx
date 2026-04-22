@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react'
 import { buildMonthGridDays, formatMonthLabel, formatYmdKey } from '../utils/dateUtils'
-import { getStorage } from '../utils/storage'
-import { getPeriodDateKeys } from '../utils/periodUtils'
 import './CompactCalendar.css'
 
 export default function CompactCalendar({
@@ -10,18 +8,15 @@ export default function CompactCalendar({
   selectedDate,
   highlightDates = [],
   dense = false,
+  /** 이 배열을 넘긴 화면에서만 생리 구간 표시. 넘기지 않으면 표시 안 함 */
+  periodKeys = null,
 }) {
   const [viewDate, setViewDate] = useState(currentDate || new Date())
-  const [periodKeys, setPeriodKeys] = useState([])
+  const periodSet = Array.isArray(periodKeys) ? periodKeys : null
 
   useEffect(() => {
     if (currentDate) setViewDate(currentDate)
   }, [currentDate])
-
-  useEffect(() => {
-    const female = getStorage('current_user', null)?.gender === 'female'
-    setPeriodKeys(female ? getPeriodDateKeys() : [])
-  }, [viewDate])
 
   const today = new Date()
   const todayKey = formatYmdKey(today.getFullYear(), today.getMonth(), today.getDate())
@@ -64,7 +59,7 @@ export default function CompactCalendar({
           const isToday = key === todayKey
           const isSelected = selectedKey === key
           const isHl = highlightDates.includes(key)
-          const isPeriod = periodKeys.includes(key)
+          const isPeriod = periodSet && periodSet.includes(key)
 
           return (
             <button

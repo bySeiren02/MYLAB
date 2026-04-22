@@ -10,7 +10,6 @@ import {
   sortEventsByTime,
   matchesRepeat,
 } from '../utils/calendarEvents'
-import { getPeriodDateKeys, getPeriodRanges } from '../utils/periodUtils'
 import { getTitleFavorites } from '../utils/eventTitleFavorites'
 import { getEventCategories } from '../utils/eventCategories'
 import {
@@ -20,10 +19,6 @@ import {
 } from '../utils/settingsPreview'
 import DatePickButton from '../components/DatePickButton'
 import './HomePage.css'
-
-function isFemaleUser() {
-  return getStorage('current_user', null)?.gender === 'female'
-}
 
 /** 한 주(7칸) 안에서 기간 일정을 가로 한 줄 막대로 묶음 (제목 표시) */
 function getWeekRangeTitleSegments(weekCells, allEvents, categories) {
@@ -96,9 +91,6 @@ export default function HomePage() {
   const [panelOpen, setPanelOpen] = useState(false)
   const [panelKey, setPanelKey] = useState(null)
   const [showAddModal, setShowAddModal] = useState(false)
-  const [showPeriodModal, setShowPeriodModal] = useState(false)
-  const [periodRanges, setPeriodRanges] = useState([])
-  const [periodForm, setPeriodForm] = useState({ startDate: '', endDate: '', memo: '' })
   const [eventForm, setEventForm] = useState(() => defaultForm(dateKey))
   const [editingContext, setEditingContext] = useState(null)
   const [rangePickViewDate, setRangePickViewDate] = useState(() => new Date())
@@ -110,7 +102,6 @@ export default function HomePage() {
 
   useEffect(() => {
     setEvents(getStorage('calendar_events', []))
-    setPeriodRanges(getPeriodRanges())
   }, [])
 
   const [favListTick, setFavListTick] = useState(0)
@@ -182,6 +173,7 @@ export default function HomePage() {
   }
 
   const todayKey = formatYmdKey(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
+  const selectedDayKey = getDateKey(currentDate)
   const days = useMemo(() => buildMonthGridDays(viewDate.getFullYear(), viewDate.getMonth()), [viewDate])
   const calWeeks = useMemo(() => {
     const w = []
@@ -436,28 +428,6 @@ export default function HomePage() {
     }
   }
 
-  const periodDateKeys = useMemo(
-    () => (isFemaleUser() ? getPeriodDateKeys() : []),
-    [periodRanges],
-  )
-
-  const savePeriodRange = () => {
-    if (!periodForm.startDate || !periodForm.endDate) return
-    const next = [
-      ...periodRanges,
-      {
-        id: Date.now(),
-        startDate: periodForm.startDate,
-        endDate: periodForm.endDate,
-        memo: periodForm.memo || '',
-      },
-    ]
-    setStorage('period_ranges', next)
-    setPeriodRanges(next)
-    setPeriodForm({ startDate: '', endDate: '', memo: '' })
-    setShowPeriodModal(false)
-  }
-
   const panelEvents = panelKey ? sortEventsByTime(getEventsForDate(events, panelKey)) : []
 
   const rangePickDays = useMemo(
@@ -661,8 +631,7 @@ export default function HomePage() {
                 const dayEvents = getEventsForDate(events, key)
                 const chipEvents = dayEvents.filter((ev) => (ev.eventType || 'single') !== 'range')
                 const isToday = key === todayKey
-                const isSelected = key === getDateKey(currentDate)
-                const isPeriod = periodDateKeys.includes(key)
+                const isSelectedDay = key === selectedDayKey
 
                 return (
                   <button
@@ -675,8 +644,7 @@ export default function HomePage() {
                       wIdx === calWeeks.length - 1 ? 'home__calCell--lastRow' : '',
                       cell.isOtherMonth ? 'dim' : '',
                       isToday ? 'today' : '',
-                      isSelected ? 'selected' : '',
-                      isPeriod ? 'period' : '',
+                      isSelectedDay ? 'selected' : '',
                     ]
                       .filter(Boolean)
                       .join(' ')}
@@ -709,14 +677,6 @@ export default function HomePage() {
             )
           })}
         </div>
-
-        {isFemaleUser() && (
-          <div className="home__hint" style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <button type="button" className="btn btn-secondary" onClick={() => setShowPeriodModal(true)}>
-              생리기간 추가
-            </button>
-          </div>
-        )}
       </section>
       </div>
 
@@ -1032,31 +992,6 @@ export default function HomePage() {
         </div>
       )}
 
-      {showPeriodModal && isFemaleUser() && (
-        <div className="modal-overlay" role="dialog" aria-modal="true">
-          <div className="modal">
-            <h2 style={{ marginBottom: '0.75rem' }}>생리기간 등록</h2>
-            <DatePickButton label="시작일 *" value={periodForm.startDate} onChange={(v) => setPeriodForm({ ...periodForm, startDate: v })} />
-            <DatePickButton label="종료일 *" value={periodForm.endDate} onChange={(v) => setPeriodForm({ ...periodForm, endDate: v })} />
-            <div className="form-group">
-              <label>메모</label>
-              <textarea
-                value={periodForm.memo}
-                onChange={(e) => setPeriodForm({ ...periodForm, memo: e.target.value })}
-                placeholder=""
-              />
-            </div>
-            <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
-              <button type="button" className="btn btn-secondary" onClick={() => setShowPeriodModal(false)}>
-                취소
-              </button>
-              <button type="button" className="btn btn-primary" onClick={savePeriodRange}>
-                저장
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

@@ -1,6 +1,9 @@
-import { getStorage } from './storage'
+import { getStorage, setStorage } from './storage'
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000
+/** 몸 메뉴 > 생리 전용 (다른 화면 캘린더와 분리) */
+const PERIOD_BODY_KEY = 'period_body_ranges'
+const PERIOD_LEGACY_KEY = 'period_ranges'
 
 function toDateOnly(dateLike) {
   const d = new Date(dateLike)
@@ -14,14 +17,29 @@ function toKey(date) {
   return `${y}-${m}-${d}`
 }
 
-export function getPeriodRanges() {
-  return getStorage('period_ranges', [])
+function readBodyRanges() {
+  let cur = getStorage(PERIOD_BODY_KEY, [])
+  if (Array.isArray(cur) && cur.length > 0) return cur
+  const old = getStorage(PERIOD_LEGACY_KEY, [])
+  if (Array.isArray(old) && old.length > 0) {
+    setStorage(PERIOD_BODY_KEY, old)
+    setStorage(PERIOD_LEGACY_KEY, [])
+    return old
+  }
+  return []
 }
 
-export function getPeriodDateKeys() {
-  const ranges = getPeriodRanges()
+export function getPeriodRanges() {
+  return readBodyRanges()
+}
+
+export function setPeriodRanges(next) {
+  setStorage(PERIOD_BODY_KEY, Array.isArray(next) ? next : [])
+}
+
+export function getPeriodDateKeysFromRanges(ranges) {
   const out = []
-  ranges.forEach((r) => {
+  ;(ranges || []).forEach((r) => {
     if (!r.startDate || !r.endDate) return
     const start = toDateOnly(r.startDate)
     const end = toDateOnly(r.endDate)
@@ -31,6 +49,10 @@ export function getPeriodDateKeys() {
     }
   })
   return [...new Set(out)]
+}
+
+export function getPeriodDateKeys() {
+  return getPeriodDateKeysFromRanges(getPeriodRanges())
 }
 
 export function isPeriodDate(dateKey) {

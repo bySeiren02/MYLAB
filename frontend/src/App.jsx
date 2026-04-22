@@ -9,6 +9,7 @@ import DailyTodoPage from './pages/DailyTodoPage'
 import MonthlyGoalPage from './pages/MonthlyGoalPage'
 import YearlyGoalPage from './pages/YearlyGoalPage'
 import DietPage from './pages/DietPage'
+import PeriodPage from './pages/PeriodPage'
 import SupplementsPage from './pages/SupplementsPage'
 import SkincarePage from './pages/SkincarePage'
 import DermatologyPage from './pages/DermatologyPage'
@@ -50,6 +51,7 @@ export default function App() {
         <Route path="/monthly-goal" element={<MonthlyGoalPage />} />
         <Route path="/yearly-goal" element={<YearlyGoalPage />} />
         <Route path="/diet" element={<DietPage />} />
+        <Route path="/period" element={<PeriodPage />} />
         <Route path="/supplements" element={<SupplementsPage />} />
         <Route path="/skincare" element={<SkincarePage />} />
         <Route path="/procedure" element={<ProcedurePage />} />

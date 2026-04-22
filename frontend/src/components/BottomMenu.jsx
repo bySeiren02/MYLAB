@@ -18,8 +18,10 @@ const categories = [
     id: 'body',
     label: '몸',
     icon: '💪',
-    directTo: '/diet',
-    items: [{ to: '/diet', label: '식단/운동/러닝' }],
+    items: [
+      { to: '/diet', label: '식단/운동/러닝' },
+      { to: '/period', label: '생리' },
+    ],
   },
   {
     id: 'care',
