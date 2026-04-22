@@ -16,6 +16,7 @@
     "mobile:ios": "npm run build && npx cap sync ios && npx cap open ios"
   },
   "dependencies": {
+    "@capacitor-community/app-icon": "^4.1.1",
     "@capacitor/core": "^5.7.8",
     "@capacitor/ios": "^5.7.8",
     "html2canvas": "^1.4.1",

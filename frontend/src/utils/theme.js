@@ -1,3 +1,5 @@
+import { appIconMarkHex } from './appIcon'
+
 export const THEME_PRESETS = {
   blackpink: {
     label: '블랙핑크',
@@ -94,4 +96,5 @@ export function applyUiSettings(settings) {
   root.style.setProperty('--font-size-base', `${settings.fontSize || 16}px`)
   const font = FONT_OPTIONS.find((f) => f.id === settings.fontFamily) || FONT_OPTIONS[0]
   root.style.setProperty('--font-family-base', font.value)
+  root.style.setProperty('--app-icon-mark', appIconMarkHex(settings.appIconVariant || 'default'))
 }
