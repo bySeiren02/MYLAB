@@ -42,8 +42,9 @@ export default function SignupPage() {
     <div
       style={{
         flex: 1,
-        minHeight: 0,
-        overflow: 'hidden',
+        minHeight: 'auto',
+        overflowY: 'auto',
+        overflowX: 'hidden',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

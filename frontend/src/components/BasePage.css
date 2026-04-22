@@ -413,6 +413,26 @@
   }
 }
 
+/* 홈이 아닐 때: 셸·메인·페이지 영역이 내용만큼 늘어나며 문서 스크롤 가능 */
+html:not(.route-home) .app-shell {
+  overflow: visible;
+}
+
+html:not(.route-home) .app-main {
+  overflow: visible;
+  flex: 1 0 auto;
+}
+
+html:not(.route-home) .app-page {
+  overflow: visible;
+}
+
+html:not(.route-home) .app-page > * {
+  overflow: visible;
+  flex: 1 0 auto;
+  min-height: auto;
+}
+
 @media (orientation: landscape) {
   .app-main {
     max-width: 100%;
