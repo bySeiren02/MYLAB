@@ -37,6 +37,7 @@ export default function DatePickButton({ label, value, onChange, placeholder = '
           <div className="modal">
             <h3 style={{ marginBottom: '0.75rem' }}>{label || '날짜 선택'}</h3>
             <CompactCalendar
+              dense
               currentDate={selected}
               selectedDate={selected}
               onDateChange={(d) => {

@@ -79,3 +79,23 @@
 .compact-cal__cell:active {
   transform: scale(0.98);
 }
+
+/* 모달 등 좁은 영역: 셀 최소 높이 완화 */
+.compact-cal--dense .compact-cal__header {
+  margin-bottom: 0.45rem;
+}
+
+.compact-cal--dense .compact-cal__grid {
+  gap: 0.2rem;
+}
+
+.compact-cal--dense .compact-cal__weekday {
+  font-size: 0.68rem;
+  padding: 0.12rem 0;
+}
+
+.compact-cal--dense .compact-cal__cell {
+  min-height: clamp(1.65rem, 9vw, 2.4rem);
+  padding-top: 0.12rem;
+  font-size: 0.8rem;
+}

@@ -154,7 +154,32 @@
   border-radius: 10px;
   overflow: hidden;
   background: var(--bg);
-  grid-auto-rows: minmax(22px, 1fr);
+  /* 요일 행은 내용 높이, 각 주 블록만 남은 높이를 균등 분배 */
+  grid-template-rows: auto;
+  grid-auto-rows: minmax(0, 1fr);
+}
+
+/* 한 주 = (선택) 기간 막대 행(auto) + 날짜 7칸(남은 높이) */
+.home__cal .calendar-grid.home__calendarGrid > .home__calWeekBlock {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  min-height: 0;
+  align-self: stretch;
+}
+
+@supports (grid-template-columns: subgrid) {
+  .home__cal .calendar-grid.home__calendarGrid > .home__calWeekBlock {
+    grid-template-columns: subgrid;
+  }
+}
+
+.home__cal .calendar-grid.home__calendarGrid > .home__calWeekBlock--hasLanes {
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.home__cal .calendar-grid.home__calendarGrid > .home__calWeekBlock:not(.home__calWeekBlock--hasLanes) {
+  grid-template-rows: minmax(0, 1fr);
 }
 
 .home__cal .calendar-grid.home__calendarGrid > .calendar-weekday {
@@ -168,7 +193,7 @@
   border-right: none;
 }
 
-.home__cal .calendar-grid.home__calendarGrid > .calendar-cell.home__calCell {
+.home__cal .calendar-grid.home__calendarGrid > .home__calWeekBlock > .calendar-cell.home__calCell {
   border: none;
   border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
@@ -176,24 +201,24 @@
   box-shadow: none;
 }
 
-.home__cal .calendar-grid.home__calendarGrid > .calendar-cell.home__calCell--rowEnd {
+.home__cal .calendar-grid.home__calendarGrid > .home__calWeekBlock > .calendar-cell.home__calCell--rowEnd {
   border-right: none;
 }
 
-.home__cal .calendar-grid.home__calendarGrid > .calendar-cell.home__calCell--lastRow {
+.home__cal .calendar-grid.home__calendarGrid > .home__calWeekBlock > .calendar-cell.home__calCell--lastRow {
   border-bottom: none;
 }
 
 /* 주 단위 기간 막대(제목): 부모 7열과 동일 폭으로 이어짐 */
-.home__cal .calendar-grid.home__calendarGrid > .home__calWeekLanes {
+.home__cal .calendar-grid.home__calendarGrid > .home__calWeekBlock > .home__calWeekLanes {
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 0;
   border-bottom: 1px solid var(--border);
   background: var(--bg);
-  padding: 4px 0 3px;
-  row-gap: 3px;
+  padding: 2px 0 2px;
+  row-gap: 2px;
 }
 
 .home__cal .home__calWeekLaneRow {
@@ -201,7 +226,7 @@
   display: grid;
   grid-template-columns: subgrid;
   align-items: stretch;
-  min-height: 22px;
+  min-height: 0;
 }
 
 @supports not (grid-template-columns: subgrid) {
@@ -296,8 +321,12 @@
   margin-top: 0.25rem;
 }
 
+.home__rangeEmbedGrid.calendar-grid > .calendar-cell.home__rangeEmbedCell {
+  min-height: 0;
+}
+
 .home__rangeEmbedCell {
-  min-height: 48px;
+  min-height: 0;
 }
 
 .home__rangeEmbedCell--span {
@@ -437,16 +466,16 @@ button.calendar-cell {
 }
 
 /* 홈 메인 달력: 테두리 격자와 맞춤 (위에서 border 제거됨) */
-.home__cal .calendar-grid.home__calendarGrid > .calendar-cell.today {
+.home__cal .calendar-grid.home__calendarGrid > .home__calWeekBlock > .calendar-cell.today {
   background: color-mix(in srgb, rgba(255, 135, 161, 0.9) 12%, transparent);
 }
 
-.home__cal .calendar-grid.home__calendarGrid > .calendar-cell.selected {
+.home__cal .calendar-grid.home__calendarGrid > .home__calWeekBlock > .calendar-cell.selected {
   background: color-mix(in srgb, var(--primary) 16%, transparent);
   box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--primary) 45%, transparent);
 }
 
-.home__cal .calendar-grid.home__calendarGrid > .calendar-cell.period {
+.home__cal .calendar-grid.home__calendarGrid > .home__calWeekBlock > .calendar-cell.period {
   background: rgba(255, 99, 132, 0.16);
 }
 

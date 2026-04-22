@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { getStorage, setStorage, getDateKey } from '../utils/storage'
 import { addYearsToYmd, buildMonthGridDays, formatMonthLabel, formatYmdKey } from '../utils/dateUtils'
 import { moodIcons } from '../utils/moodIcons'
@@ -624,12 +624,15 @@ export default function HomePage() {
               {w}
             </div>
           ))}
-          {calWeeks.map((weekCells, wIdx) => (
-            <Fragment key={`week-${wIdx}`}>
-              {(() => {
-                const segs = getWeekRangeTitleSegments(weekCells, events, eventCategories)
-                if (segs.length === 0) return null
-                return (
+          {calWeeks.map((weekCells, wIdx) => {
+            const segs = getWeekRangeTitleSegments(weekCells, events, eventCategories)
+            const hasLanes = segs.length > 0
+            return (
+              <div
+                key={`week-${wIdx}`}
+                className={['home__calWeekBlock', hasLanes ? 'home__calWeekBlock--hasLanes' : ''].filter(Boolean).join(' ')}
+              >
+                {hasLanes && (
                   <div className="home__calWeekLanes">
                     {segs.map((seg) => (
                       <div key={seg.id} className="home__calWeekLaneRow">
@@ -651,8 +654,7 @@ export default function HomePage() {
                       </div>
                     ))}
                   </div>
-                )
-              })()}
+                )}
               {weekCells.map((cell, colIdx) => {
                 const idx = wIdx * 7 + colIdx
                 const key = formatYmdKey(cell.year, cell.month, cell.day)
@@ -703,8 +705,9 @@ export default function HomePage() {
                   </button>
                 )
               })}
-            </Fragment>
-          ))}
+              </div>
+            )
+          })}
         </div>
 
         {isFemaleUser() && (

@@ -9,6 +9,7 @@ export default function CompactCalendar({
   onDateChange,
   selectedDate,
   highlightDates = [],
+  dense = false,
 }) {
   const [viewDate, setViewDate] = useState(currentDate || new Date())
   const [periodKeys, setPeriodKeys] = useState([])
@@ -42,7 +43,7 @@ export default function CompactCalendar({
   }
 
   return (
-    <div className="compact-cal">
+    <div className={['compact-cal', dense ? 'compact-cal--dense' : ''].filter(Boolean).join(' ')}>
       <div className="compact-cal__header">
         <button type="button" className="compact-cal__nav" onClick={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1))}>
           ‹
