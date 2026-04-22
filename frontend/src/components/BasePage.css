@@ -1,18 +1,18 @@
 .app-shell {
-  flex: 1;
-  min-height: 0;
+  flex: none;
+  min-height: auto;
   display: flex;
   flex-direction: column;
   background: var(--bg);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .app-main {
-  flex: 1;
-  min-height: 0;
+  flex: none;
+  min-height: auto;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: visible;
   padding-top: max(1rem, env(safe-area-inset-top, 0px));
   padding-right: max(env(safe-area-inset-right, 0px), 0.7rem);
   padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
@@ -23,45 +23,21 @@
 }
 
 .app-page {
-  flex: 1;
-  min-height: 0;
+  flex: none;
+  min-height: auto;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-}
-
-.app-page > * {
-  flex: 1;
-  min-height: 0;
-  min-width: 0;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.app-brand-mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  border: 2px solid color-mix(in srgb, var(--app-icon-mark) 55%, transparent);
-  background: color-mix(in srgb, var(--app-icon-mark) 12%, transparent);
-  color: var(--app-icon-mark);
-  line-height: 0;
-  flex-shrink: 0;
-  padding: 2px;
-  box-sizing: border-box;
-}
-
-.app-brand-mark__svg {
-  display: block;
   overflow: visible;
 }
 
-/* L(악센트) 위에 M이 또렷하게 보이도록 밝은 선 */
-.app-brand-mark__m {
-  stroke: color-mix(in srgb, #fff 88%, var(--bg) 12%);
+.app-page > * {
+  flex: none;
+  min-height: auto;
+  min-width: 0;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
 }
 
 .top-user-bar {
@@ -73,13 +49,6 @@
   margin-bottom: 0.9rem;
 }
 
-.top-user-bar__left {
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
-  min-width: 0;
-}
-
 .top-user-title {
   font-size: 1.05rem;
   font-weight: 700;
@@ -87,6 +56,8 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1;
 }
 
 .page-title-row {
@@ -420,26 +391,6 @@
     padding-left: max(env(safe-area-inset-left, 0px), 0.7rem);
     padding-right: max(env(safe-area-inset-right, 0px), 0.7rem);
   }
-}
-
-/* 홈이 아닐 때: 셸·메인·페이지 영역이 내용만큼 늘어나며 문서 스크롤 가능 */
-html:not(.route-home) .app-shell {
-  overflow: visible;
-}
-
-html:not(.route-home) .app-main {
-  overflow: visible;
-  flex: 1 0 auto;
-}
-
-html:not(.route-home) .app-page {
-  overflow: visible;
-}
-
-html:not(.route-home) .app-page > * {
-  overflow: visible;
-  flex: 1 0 auto;
-  min-height: auto;
 }
 
 @media (orientation: landscape) {

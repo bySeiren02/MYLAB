@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-MyLab 홈 화면 아이콘: 얇은 L + 안쪽(발 위)에 또렷한 M.
-Run from repo root: python3 scripts/generate_ml_ios_icons.py
-Requires Pillow.
+MyLab iOS 1024 앱 아이콘: 다크 스쿼클 + ML 두 글자를 세로 막대가 맞닿도록(커닝) 배치.
+내부 2048 렌더 후 1024로 축소.
+Run: python3 scripts/generate_ml_ios_icons.py
 """
 from __future__ import annotations
 
@@ -11,12 +11,14 @@ import os
 from pathlib import Path
 
 try:
-    from PIL import Image, ImageDraw
+    from PIL import Image, ImageDraw, ImageFont
 except ImportError as e:
     raise SystemExit("Install Pillow: pip install Pillow") from e
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "frontend" / "ios" / "App" / "App" / "Assets.xcassets"
+OUT_SIZE = 1024
+INTERNAL = 2048
 
 VARIANTS: list[tuple[str, str, tuple[int, int, int]]] = [
     ("AppIcon.appiconset", "AppIcon-512@2x.png", (255, 135, 161)),
@@ -26,72 +28,59 @@ VARIANTS: list[tuple[str, str, tuple[int, int, int]]] = [
     ("AppIconSky.appiconset", "AppIconSky.png", (56, 189, 248)),
 ]
 
-BG = (15, 15, 20)
-SAFE = 0.10
 
-
-def _stroke_on_accent(accent: tuple[int, int, int]) -> tuple[int, int, int, int]:
-    """밝은 악센트면 어두운 M, 어두우면 밝은 M."""
-    r, g, b = accent
-    lum = 0.2126 * r + 0.7152 * g + 0.0722 * b
-    if lum > 165:
-        return (24, 24, 32, 255)
-    return (255, 255, 255, 255)
-
-
-def draw_lm_icon(accent: tuple[int, int, int], size: int = 1024) -> Image.Image:
-    img = Image.new("RGBA", (size, size), BG + (255,))
-    draw = ImageDraw.Draw(img)
-    m = int(size * SAFE)
-    plate = (m, m, size - m, size - m)
-    draw.rounded_rectangle(plate, radius=int(size * 0.22), outline=accent + (200,), width=max(4, size // 128))
-    draw.rounded_rectangle(
-        (m + 6, m + 6, size - m - 6, size - m - 6),
-        radius=int(size * 0.2),
-        fill=(22, 22, 30, 255),
-    )
-
-    # 얇은 L: 세로 막대 + 아래 가로 (비율은 1024 기준 튜닝)
-    stem_left = int(size * 0.198)
-    stem_w = max(22, int(size * 0.028))
-    stem_top = int(size * 0.138)
-    stem_bot = int(size * 0.478)
-    foot_h = max(36, int(size * 0.058))
-    foot_top = stem_bot
-    foot_right = int(size * 0.798)
-
-    draw.rounded_rectangle(
-        (stem_left, stem_top, stem_left + stem_w, stem_bot),
-        radius=max(4, stem_w // 4),
-        fill=accent + (255,),
-    )
-    draw.rounded_rectangle(
-        (stem_left, foot_top, foot_right, foot_top + foot_h),
-        radius=max(6, foot_h // 3),
-        fill=accent + (255,),
-    )
-
-    # M: 발 안쪽·줄기 오른쪽에 지그재그 (굵은 선)
-    stem_right = stem_left + stem_w
-    mx0 = stem_right + int(size * 0.055)
-    my_base = foot_top + foot_h * 0.62
-    my_peak = foot_top + foot_h * 0.18
-    step = int(size * 0.085)
-    pts = [
-        (mx0, my_base),
-        (mx0 + step * 0.48, my_peak),
-        (mx0 + step * 1.05, my_base),
-        (mx0 + step * 1.58, my_peak),
-        (mx0 + step * 2.12, my_base),
+def truetype_heavy(size: int) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
+    candidates = [
+        "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
+        "/System/Library/Fonts/Supplemental/Arial.ttf",
+        "/Library/Fonts/Arial Bold.ttf",
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
     ]
-    lw = max(14, int(size * 0.024))
-    m_color = _stroke_on_accent(accent)
-    try:
-        draw.line(pts, fill=m_color, width=lw, joint="curve")
-    except TypeError:
-        draw.line(pts, fill=m_color, width=lw)
+    for p in candidates:
+        if os.path.isfile(p):
+            try:
+                return ImageFont.truetype(p, size=size)
+            except OSError:
+                continue
+    return ImageFont.load_default()
+
+
+def draw_icon(accent: tuple[int, int, int], s: int) -> Image.Image:
+    """M(왼쪽)과 L(오른쪽)의 안쪽 세로 획이 맞닿도록 커닝한 ML."""
+    img = Image.new("RGBA", (s, s), (18, 18, 22, 255))
+    draw = ImageDraw.Draw(img)
+    r_out = int(s * 0.22)
+    w_line = max(s // 220, 3)
+    draw.rounded_rectangle((0, 0, s - 1, s - 1), radius=r_out, fill=(26, 26, 32, 255), outline=accent + (200,), width=w_line)
+
+    font = truetype_heavy(int(s * 0.36))
+    fill = accent + (255,)
+
+    bbox_m = draw.textbbox((0, 0), "M", font=font)
+    bbox_l = draw.textbbox((0, 0), "L", font=font)
+    wm = bbox_m[2] - bbox_m[0]
+    hm = bbox_m[3] - bbox_m[1]
+    wl = bbox_l[2] - bbox_l[0]
+    hl = bbox_l[3] - bbox_l[1]
+
+    # M 오른쪽 세로와 L 왼쪽 세로가 겹치듯 붙도록 음수 커닝
+    kern = int(s * 0.042)
+    total = wm + wl - kern
+    left = (s - total) // 2
+    cy = s // 2
+
+    x_m = left + wm // 2
+    x_l = left + wm + wl // 2 - kern
+
+    draw.text((x_m, cy), "M", font=font, fill=fill, anchor="mm")
+    draw.text((x_l, cy), "L", font=font, fill=fill, anchor="mm")
 
     return img
+
+
+def draw_lm_icon(accent: tuple[int, int, int]) -> Image.Image:
+    big = draw_icon(accent, INTERNAL)
+    return big.resize((OUT_SIZE, OUT_SIZE), Image.Resampling.LANCZOS)
 
 
 def write_imageset(folder: Path, png_name: str, accent: tuple[int, int, int]) -> None:
@@ -116,7 +105,7 @@ def main() -> None:
     ASSETS.mkdir(parents=True, exist_ok=True)
     for set_dir, fname, accent in VARIANTS:
         write_imageset(ASSETS / set_dir, fname, accent)
-    print("Wrote L+M icons to", ASSETS)
+    print("Wrote ML icons to", ASSETS)
 
 
 if __name__ == "__main__":

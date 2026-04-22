@@ -1,7 +1,7 @@
 .home {
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
+  flex: none;
+  min-height: auto;
+  overflow: visible;
 }
 
 .home .page-route-body > .home__compact {
@@ -13,9 +13,9 @@
 }
 
 .home .page-route-body > .home__cal {
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
+  flex: none;
+  min-height: auto;
+  overflow: visible;
   display: flex;
   flex-direction: column;
 }
@@ -147,8 +147,9 @@
 
 /* 홈 메인 달력만: 격자 간격 없이 한 줄 구분선, 기간 막대가 끊기지 않게 */
 .home__cal .calendar-grid.home__calendarGrid {
-  flex: 1;
-  min-height: 0;
+  flex: none;
+  width: 100%;
+  min-height: min(62dvh, 560px);
   gap: 0;
   border: 1px solid var(--border);
   border-radius: 10px;

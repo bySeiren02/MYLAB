@@ -1,5 +1,4 @@
-import { useLayoutEffect } from 'react'
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import BasePageLayout from './components/BasePageLayout'
 import { getStorage } from './utils/storage'
 import HomePage from './pages/HomePage'
@@ -28,12 +27,6 @@ function ProtectedRoute({ children }) {
 }
 
 export default function App() {
-  const { pathname } = useLocation()
-  useLayoutEffect(() => {
-    const isHome = pathname === '/' || pathname === ''
-    document.documentElement.classList.toggle('route-home', isHome)
-  }, [pathname])
-
   return (
     <div className="app-routes-fill">
     <Routes>

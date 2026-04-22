@@ -1,5 +1,5 @@
 :root {
-  /* 앱 ML 마크·iOS 아이콘 톤 연동 (설정에서 변경) */
+  /* 앱 아이콘 포인트 컬러·iOS 톤 연동 (설정에서 변경) */
   --app-icon-mark: #ff87a1;
   /* 다크 모드 베이스 + 파스텔 핑크 포인트 컬러 */
   --bg: #0f0f12;
@@ -232,7 +232,7 @@ button {
   opacity: 0.45;
 }
 
-/* 기본: 문서 세로 스크롤 허용. 홈(/)만 html.route-home으로 한 화면 고정 */
+/* 문서 세로 스크롤 — flex로 높이를 뷰포트에 고정하지 않음 */
 html {
   min-height: 100%;
   min-height: 100dvh;
@@ -263,23 +263,23 @@ body {
 }
 
 .app-viewport {
-  flex: 1 0 auto;
-  min-height: 100dvh;
+  flex: none;
+  min-height: auto;
   display: flex;
   flex-direction: column;
   overflow: visible;
 }
 
 .app-routes-fill {
-  flex: 1 0 auto;
-  min-height: 0;
+  flex: none;
+  min-height: auto;
   display: flex;
   flex-direction: column;
   overflow: visible;
 }
 
 .app-routes-fill > * {
-  flex: 1 0 auto;
+  flex: none;
   min-width: 0;
   min-height: auto;
   overflow: visible;
@@ -287,78 +287,22 @@ body {
   flex-direction: column;
 }
 
-html.route-home {
-  height: 100%;
-  overflow: hidden;
-}
-
-html.route-home body {
-  height: 100%;
-  overflow: hidden;
-}
-
-html.route-home #root {
-  height: 100dvh;
-  max-height: 100dvh;
-  overflow: hidden;
-  min-height: 0;
-}
-
-html.route-home .app-viewport {
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
-}
-
-html.route-home .app-routes-fill {
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
-}
-
-html.route-home .app-routes-fill > * {
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
-}
-
-/**
- * 페이지 본문: 홈에서는 넘침 숨김, 그 외에는 높이에 맞춰 스크롤 가능
- */
 .page-route-body {
-  flex: 1;
-  min-height: 0;
+  flex: none;
+  min-height: auto;
   min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-}
-
-html.route-home .page-route-body {
-  overflow: hidden;
-}
-
-html:not(.route-home) .page-route-body {
-  flex: 0 0 auto;
-  min-height: auto;
   overflow: visible;
 }
 
 .page-route-body__grow {
-  flex: 1;
-  min-height: 0;
+  flex: none;
+  min-height: auto;
   min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-}
-
-html.route-home .page-route-body__grow {
-  overflow: hidden;
-}
-
-html:not(.route-home) .page-route-body__grow {
-  flex: 1 1 auto;
-  min-height: auto;
   overflow: visible;
 }

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import BottomMenu from './BottomMenu'
-import AppBrandMark from './AppBrandMark'
 import { getStorage, setStorage } from '../utils/storage'
 import { applyUiSettings, FONT_OPTIONS, THEME_PRESETS } from '../utils/theme'
 import { APP_ICON_VARIANTS, appIconMarkHex, syncNativeAppIcon } from '../utils/appIcon'
@@ -126,12 +125,9 @@ export default function BasePageLayout() {
     <div className="app-shell">
       <main className="app-main">
         <div className="top-user-bar">
-          <div className="top-user-bar__left">
-            <AppBrandMark size={40} />
-            <div className="top-user-title">
-              {currentUser?.nickname || 'Guest'}
-              {"'s 홈"}
-            </div>
+          <div className="top-user-title">
+            {currentUser?.nickname || 'Guest'}
+            {"'s 홈"}
           </div>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
             <button type="button" className="btn btn-secondary" onClick={openSettings}>
@@ -253,7 +249,7 @@ export default function BasePageLayout() {
                     </div>
                   </div>
                   <div className="form-group">
-                    <label>앱 아이콘 색 (상단 마크 · iOS 홈 화면)</label>
+                    <label>앱 아이콘 색 (포인트 컬러 · iOS 홈 화면)</label>
                     <div className="settings-app-icon-grid" role="list">
                       {APP_ICON_VARIANTS.map((v) => {
                         const active = (draft.appIconVariant || 'default') === v.id
@@ -275,7 +271,7 @@ export default function BasePageLayout() {
                       })}
                     </div>
                     <p className="settings-app-icon-hint">
-                      상단 L·M 마크는 즉시 반영됩니다. iOS 홈 화면 아이콘은 저장 후 적용되며, 일부 기기에서는 잠시 캐시될 수 있습니다. (웹 브라우저에서는 홈 아이콘이 바뀌지 않을 수 있어요.)
+                      포인트 컬러는 테마와 함께 쓰이며, iOS 홈 화면 아이콘은 저장 후 적용됩니다. 일부 기기에서는 잠시 캐시될 수 있어요. (웹에서는 홈 아이콘이 바뀌지 않을 수 있습니다.)
                     </p>
                   </div>
                 </>
