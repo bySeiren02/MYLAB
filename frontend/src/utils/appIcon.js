@@ -3,11 +3,11 @@ import { Capacitor } from '@capacitor/core'
 
 /** iOS 대체 아이콘 이름(Info.plist·Assets 이름과 동일) */
 export const APP_ICON_VARIANTS = [
-  { id: 'default', label: '기본 (로즈 ML)', nativeName: null },
-  { id: 'mint', label: '민트 ML', nativeName: 'AppIconMint' },
-  { id: 'amber', label: '앰버 ML', nativeName: 'AppIconAmber' },
-  { id: 'violet', label: '바이올렛 ML', nativeName: 'AppIconViolet' },
-  { id: 'sky', label: '스카이 ML', nativeName: 'AppIconSky' },
+  { id: 'default', label: '기본 (로즈)', nativeName: null },
+  { id: 'mint', label: '민트', nativeName: 'AppIconMint' },
+  { id: 'amber', label: '앰버', nativeName: 'AppIconAmber' },
+  { id: 'violet', label: '바이올렛', nativeName: 'AppIconViolet' },
+  { id: 'sky', label: '스카이', nativeName: 'AppIconSky' },
 ]
 
 const MARK_HEX = {

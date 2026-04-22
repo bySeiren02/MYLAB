@@ -253,7 +253,7 @@ export default function BasePageLayout() {
                     </div>
                   </div>
                   <div className="form-group">
-                    <label>앱 아이콘 색 (ML 마크 · iOS 홈 화면)</label>
+                    <label>앱 아이콘 색 (상단 마크 · iOS 홈 화면)</label>
                     <div className="settings-app-icon-grid" role="list">
                       {APP_ICON_VARIANTS.map((v) => {
                         const active = (draft.appIconVariant || 'default') === v.id
@@ -275,7 +275,7 @@ export default function BasePageLayout() {
                       })}
                     </div>
                     <p className="settings-app-icon-hint">
-                      앱 상단 ML 마크는 즉시 반영됩니다. iOS 홈 화면 아이콘은 저장 후 적용되며, 일부 기기에서는 잠시 캐시될 수 있습니다. (웹 브라우저에서는 홈 아이콘이 바뀌지 않을 수 있어요.)
+                      상단 L·M 마크는 즉시 반영됩니다. iOS 홈 화면 아이콘은 저장 후 적용되며, 일부 기기에서는 잠시 캐시될 수 있습니다. (웹 브라우저에서는 홈 아이콘이 바뀌지 않을 수 있어요.)
                     </p>
                   </div>
                 </>

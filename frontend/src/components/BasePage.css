@@ -48,11 +48,15 @@
   border: 2px solid color-mix(in srgb, var(--app-icon-mark) 55%, transparent);
   background: color-mix(in srgb, var(--app-icon-mark) 12%, transparent);
   color: var(--app-icon-mark);
-  font-weight: 800;
-  letter-spacing: -0.07em;
-  line-height: 1;
+  line-height: 0;
   flex-shrink: 0;
-  font-family: inherit;
+  padding: 2px;
+  box-sizing: border-box;
+}
+
+.app-brand-mark__svg {
+  display: block;
+  overflow: visible;
 }
 
 .top-user-bar {
