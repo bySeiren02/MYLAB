@@ -57,14 +57,21 @@
   opacity: 0.35;
 }
 
-.compact-cal__cell--today {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 1px rgba(255, 135, 161, 0.35) inset;
+.compact-cal__cell--today:not(.compact-cal__cell--selected) {
+  background: transparent;
+  box-shadow: none;
+  border-color: var(--border);
+  border-bottom: 2px solid color-mix(in srgb, var(--primary) 68%, transparent);
 }
 
 .compact-cal__cell--selected {
   border-color: var(--primary);
   background: rgba(255, 135, 161, 0.12);
+}
+
+.compact-cal__cell--today.compact-cal__cell--selected {
+  box-shadow: 0 0 0 1px rgba(255, 135, 161, 0.4) inset;
+  border-bottom-color: transparent;
 }
 
 .compact-cal__cell--hl {
