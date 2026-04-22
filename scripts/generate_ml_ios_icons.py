@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-MyLab 'ML' monogram app icons for iOS (1024 universal).
+MyLab 홈 화면 아이콘: 얇은 L + 안쪽(발 위)에 또렷한 M.
 Run from repo root: python3 scripts/generate_ml_ios_icons.py
 Requires Pillow.
 """
@@ -11,16 +11,15 @@ import os
 from pathlib import Path
 
 try:
-    from PIL import Image, ImageDraw, ImageFont
+    from PIL import Image, ImageDraw
 except ImportError as e:
     raise SystemExit("Install Pillow: pip install Pillow") from e
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "frontend" / "ios" / "App" / "App" / "Assets.xcassets"
 
-# (imageset_dir_name, filename inside set, accent RGB, label for debug)
 VARIANTS: list[tuple[str, str, tuple[int, int, int]]] = [
-    ("AppIcon.appiconset", "AppIcon-512@2x.png", (255, 135, 161)),  # rose — primary
+    ("AppIcon.appiconset", "AppIcon-512@2x.png", (255, 135, 161)),
     ("AppIconMint.appiconset", "AppIconMint.png", (94, 234, 212)),
     ("AppIconAmber.appiconset", "AppIconAmber.png", (251, 191, 36)),
     ("AppIconViolet.appiconset", "AppIconViolet.png", (167, 139, 250)),
@@ -28,32 +27,22 @@ VARIANTS: list[tuple[str, str, tuple[int, int, int]]] = [
 ]
 
 BG = (15, 15, 20)
-SAFE = 0.12  # margin ratio
+SAFE = 0.10
 
 
-def truetype_bold(size: int) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
-    candidates = [
-        "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
-        "/System/Library/Fonts/Supplemental/Arial.ttf",
-        "/Library/Fonts/Arial Bold.ttf",
-        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
-    ]
-    for p in candidates:
-        if os.path.isfile(p):
-            try:
-                return ImageFont.truetype(p, size=size)
-            except OSError:
-                continue
-    return ImageFont.load_default()
+def _stroke_on_accent(accent: tuple[int, int, int]) -> tuple[int, int, int, int]:
+    """밝은 악센트면 어두운 M, 어두우면 밝은 M."""
+    r, g, b = accent
+    lum = 0.2126 * r + 0.7152 * g + 0.0722 * b
+    if lum > 165:
+        return (24, 24, 32, 255)
+    return (255, 255, 255, 255)
 
 
-def draw_ml_icon(accent: tuple[int, int, int], size: int = 1024) -> Image.Image:
+def draw_lm_icon(accent: tuple[int, int, int], size: int = 1024) -> Image.Image:
     img = Image.new("RGBA", (size, size), BG + (255,))
     draw = ImageDraw.Draw(img)
     m = int(size * SAFE)
-    inner = size - 2 * m
-
-    # Soft rounded plate
     plate = (m, m, size - m, size - m)
     draw.rounded_rectangle(plate, radius=int(size * 0.22), outline=accent + (200,), width=max(4, size // 128))
     draw.rounded_rectangle(
@@ -62,34 +51,52 @@ def draw_ml_icon(accent: tuple[int, int, int], size: int = 1024) -> Image.Image:
         fill=(22, 22, 30, 255),
     )
 
-    font_size = int(inner * 0.52)
-    font = truetype_bold(font_size)
-    text = "ML"
-    bbox = draw.textbbox((0, 0), text, font=font)
-    tw = bbox[2] - bbox[0]
-    th = bbox[3] - bbox[1]
-    tx = (size - tw) // 2
-    ty = (size - th) // 2 - int(size * 0.02)
+    # 얇은 L: 세로 막대 + 아래 가로 (비율은 1024 기준 튜닝)
+    stem_left = int(size * 0.198)
+    stem_w = max(22, int(size * 0.028))
+    stem_top = int(size * 0.138)
+    stem_bot = int(size * 0.478)
+    foot_h = max(36, int(size * 0.058))
+    foot_top = stem_bot
+    foot_right = int(size * 0.798)
 
-    # Glow
-    for dx, dy, alpha in ((4, 4, 40), (2, 2, 70), (0, 0, 255)):
-        c = accent + (alpha,)
-        draw.text((tx + dx, ty + dy), text, font=font, fill=c)
+    draw.rounded_rectangle(
+        (stem_left, stem_top, stem_left + stem_w, stem_bot),
+        radius=max(4, stem_w // 4),
+        fill=accent + (255,),
+    )
+    draw.rounded_rectangle(
+        (stem_left, foot_top, foot_right, foot_top + foot_h),
+        radius=max(6, foot_h // 3),
+        fill=accent + (255,),
+    )
 
-    draw.text((tx, ty), text, font=font, fill=accent + (255,))
-
-    # Accent underline (lab)
-    uw = int(size * 0.38)
-    ux = (size - uw) // 2
-    uy = ty + th + int(size * 0.04)
-    draw.rounded_rectangle((ux, uy, ux + uw, uy + max(6, size // 64)), radius=4, fill=accent + (230,))
+    # M: 발 안쪽·줄기 오른쪽에 지그재그 (굵은 선)
+    stem_right = stem_left + stem_w
+    mx0 = stem_right + int(size * 0.055)
+    my_base = foot_top + foot_h * 0.62
+    my_peak = foot_top + foot_h * 0.18
+    step = int(size * 0.085)
+    pts = [
+        (mx0, my_base),
+        (mx0 + step * 0.48, my_peak),
+        (mx0 + step * 1.05, my_base),
+        (mx0 + step * 1.58, my_peak),
+        (mx0 + step * 2.12, my_base),
+    ]
+    lw = max(14, int(size * 0.024))
+    m_color = _stroke_on_accent(accent)
+    try:
+        draw.line(pts, fill=m_color, width=lw, joint="curve")
+    except TypeError:
+        draw.line(pts, fill=m_color, width=lw)
 
     return img
 
 
 def write_imageset(folder: Path, png_name: str, accent: tuple[int, int, int]) -> None:
     folder.mkdir(parents=True, exist_ok=True)
-    img = draw_ml_icon(accent)
+    img = draw_lm_icon(accent)
     img.save(folder / png_name, "PNG")
     contents = {
         "images": [
@@ -109,7 +116,7 @@ def main() -> None:
     ASSETS.mkdir(parents=True, exist_ok=True)
     for set_dir, fname, accent in VARIANTS:
         write_imageset(ASSETS / set_dir, fname, accent)
-    print("Wrote ML icons to", ASSETS)
+    print("Wrote L+M icons to", ASSETS)
 
 
 if __name__ == "__main__":
