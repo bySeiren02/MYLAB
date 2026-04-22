@@ -1,28 +1,22 @@
 PODS:
   - Capacitor (5.7.8):
     - CapacitorCordova
-  - CapacitorCommunityAppIcon (4.1.1):
-    - Capacitor
   - CapacitorCordova (5.7.8)
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
-  - "CapacitorCommunityAppIcon (from `../../node_modules/@capacitor-community/app-icon`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
 
 EXTERNAL SOURCES:
   Capacitor:
     :path: "../../node_modules/@capacitor/ios"
-  CapacitorCommunityAppIcon:
-    :path: "../../node_modules/@capacitor-community/app-icon"
   CapacitorCordova:
     :path: "../../node_modules/@capacitor/ios"
 
 SPEC CHECKSUMS:
   Capacitor: 9686e5711b48a1aa84671ede795d0175848abcba
-  CapacitorCommunityAppIcon: 0e071ee3eef483e9c1f3322bb6d5a9952d6dd81d
   CapacitorCordova: 31ab98dca2ddcee051027a1afe7e8c85c82f7297
 
-PODFILE CHECKSUM: af5e6b429df70e9f96bfa93aea5f9041e79daf71
+PODFILE CHECKSUM: b6fe64135c222f8a4494512d5e0ecfa014c3a63a
 
 COCOAPODS: 1.16.2
