@@ -422,9 +422,11 @@ export default function HomePage() {
 
     const list = sortEventsByTime(getEventsForDate(events, key))
     setPanelKey(key)
-    setPanelOpen(true)
     if (list.length === 0) {
+      setPanelOpen(false)
       openNewEvent(key)
+    } else {
+      setPanelOpen(true)
     }
   }
 
