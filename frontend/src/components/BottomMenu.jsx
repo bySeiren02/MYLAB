@@ -60,6 +60,15 @@ const categories = [
     directTo: '/date',
     items: [{ to: '/date', label: '데이트 캘린더' }],
   },
+  {
+    id: 'daily',
+    label: '일',
+    icon: '🗒️',
+    items: [
+      { to: '/ledger', label: '가계부' },
+      { to: '/side-hustle', label: '부업' },
+    ],
+  },
 ]
 
 export default function BottomMenu() {

@@ -83,6 +83,21 @@
   border-color: rgba(255, 99, 132, 0.55);
 }
 
+.compact-cal__cell--ledger-income {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: rgba(34, 197, 94, 0.45);
+}
+
+.compact-cal__cell--ledger-expense {
+  background: rgba(248, 113, 113, 0.2);
+  border-color: rgba(248, 113, 113, 0.45);
+}
+
+.compact-cal__cell--ledger-both {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.22) 50%, rgba(248, 113, 113, 0.22) 50%);
+  border-color: rgba(148, 163, 184, 0.65);
+}
+
 .compact-cal__cell:active {
   transform: scale(0.98);
 }

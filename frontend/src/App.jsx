@@ -19,6 +19,8 @@ import CulturalPage from './pages/CulturalPage'
 import MovieDramaPage from './pages/MovieDramaPage'
 import FictionWebtoonPage from './pages/FictionWebtoonPage'
 import DatePage from './pages/DatePage'
+import LedgerPage from './pages/LedgerPage'
+import SideHustlePage from './pages/SideHustlePage'
 
 function ProtectedRoute({ children }) {
   const user = getStorage('current_user', null)
@@ -55,6 +57,8 @@ export default function App() {
         <Route path="/cultural" element={<CulturalPage />} />
         <Route path="/fiction" element={<FictionWebtoonPage />} />
         <Route path="/date" element={<DatePage />} />
+        <Route path="/ledger" element={<LedgerPage />} />
+        <Route path="/side-hustle" element={<SideHustlePage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

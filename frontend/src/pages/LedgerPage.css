@@ -1,0 +1,137 @@
+.ledger-totals {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  margin-bottom: 0.5rem;
+}
+
+.ledger-totals__box {
+  flex: 1;
+  min-width: 0;
+}
+
+.ledger-totals__box--in {
+  text-align: left;
+}
+
+.ledger-totals__box--out {
+  text-align: right;
+}
+
+.ledger-totals__label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 0.2rem;
+}
+
+.ledger-totals__value {
+  font-size: 1.05rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.ledger-totals__value--in {
+  color: #22c55e;
+}
+
+.ledger-totals__value--out {
+  color: #f87171;
+}
+
+.ledger-type-toggle {
+  display: flex;
+  gap: 0.35rem;
+  margin-bottom: 0.65rem;
+}
+
+.ledger-type-toggle button {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 10px;
+  border: 2px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.ledger-type-toggle button.active--in {
+  border-color: #22c55e;
+  background: rgba(34, 197, 94, 0.14);
+  color: #16a34a;
+}
+
+.ledger-type-toggle button.active--out {
+  border-color: #f87171;
+  background: rgba(248, 113, 113, 0.14);
+  color: #dc2626;
+}
+
+.ledger-schedule-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+
+.ledger-schedule-row button {
+  padding: 0.4rem 0.55rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.ledger-schedule-row button.active {
+  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 14%, transparent);
+  font-weight: 700;
+}
+
+.ledger-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  margin-bottom: 0.4rem;
+  background: var(--bg);
+}
+
+.ledger-line--in {
+  border-left: 4px solid #22c55e;
+}
+
+.ledger-line--out {
+  border-left: 4px solid #f87171;
+}
+
+.ledger-line__meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.15rem;
+}
+
+.ledger-line__amt {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.ledger-line__amt--in {
+  color: #22c55e;
+}
+
+.ledger-line__amt--out {
+  color: #f87171;
+}

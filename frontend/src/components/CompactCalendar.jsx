@@ -10,6 +10,10 @@ export default function CompactCalendar({
   dense = false,
   /** 이 배열을 넘긴 화면에서만 생리 구간 표시. 넘기지 않으면 표시 안 함 */
   periodKeys = null,
+  /** 달력에 보이는 월이 바뀔 때 (가계부 월 합계 등) */
+  onViewMonthChange,
+  /** { 'YYYY-MM-DD': { income?: boolean, expense?: boolean } } */
+  dayTint = null,
 }) {
   const [viewDate, setViewDate] = useState(currentDate || new Date())
   const periodSet = Array.isArray(periodKeys) ? periodKeys : null
@@ -17,6 +21,10 @@ export default function CompactCalendar({
   useEffect(() => {
     if (currentDate) setViewDate(currentDate)
   }, [currentDate])
+
+  useEffect(() => {
+    onViewMonthChange?.(viewDate)
+  }, [viewDate, onViewMonthChange])
 
   const today = new Date()
   const todayKey = formatYmdKey(today.getFullYear(), today.getMonth(), today.getDate())
@@ -40,11 +48,19 @@ export default function CompactCalendar({
   return (
     <div className={['compact-cal', dense ? 'compact-cal--dense' : ''].filter(Boolean).join(' ')}>
       <div className="compact-cal__header">
-        <button type="button" className="compact-cal__nav" onClick={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1))}>
+        <button
+          type="button"
+          className="compact-cal__nav"
+          onClick={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1))}
+        >
           ‹
         </button>
         <div className="compact-cal__title">{formatMonthLabel(viewDate)}</div>
-        <button type="button" className="compact-cal__nav" onClick={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1))}>
+        <button
+          type="button"
+          className="compact-cal__nav"
+          onClick={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1))}
+        >
           ›
         </button>
       </div>
@@ -60,6 +76,10 @@ export default function CompactCalendar({
           const isSelected = selectedKey === key
           const isHl = highlightDates.includes(key)
           const isPeriod = periodSet && periodSet.includes(key)
+          const tint = dayTint && dayTint[key]
+          const tintIncome = tint?.income && !cell.isOtherMonth
+          const tintExpense = tint?.expense && !cell.isOtherMonth
+          const tintBoth = tintIncome && tintExpense
 
           return (
             <button
@@ -72,6 +92,9 @@ export default function CompactCalendar({
                 isSelected ? 'compact-cal__cell--selected' : '',
                 isHl ? 'compact-cal__cell--hl' : '',
                 isPeriod ? 'compact-cal__cell--period' : '',
+                tintBoth ? 'compact-cal__cell--ledger-both' : '',
+                !tintBoth && tintIncome ? 'compact-cal__cell--ledger-income' : '',
+                !tintBoth && tintExpense ? 'compact-cal__cell--ledger-expense' : '',
               ]
                 .filter(Boolean)
                 .join(' ')}
