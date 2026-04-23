@@ -21,7 +21,7 @@ import DatePickButton from '../components/DatePickButton'
 import '../components/CompactCalendar.css'
 import './HomePage.css'
 
-/** 한 주(7칸) 안에서 기간 일정을 가로 한 줄 막대로 묶음 (제목 표시) */
+/** 한 주(7칸) 안에서 기간 일정이 차지하는 열 구간(셀 안 막대용) */
 function getWeekRangeTitleSegments(weekCells, allEvents, categories) {
   const segments = []
   for (const e of allEvents) {
@@ -37,16 +37,12 @@ function getWeekRangeTitleSegments(weekCells, allEvents, categories) {
       }
     }
     if (startCol === -1) continue
-    const sk = formatYmdKey(weekCells[startCol].year, weekCells[startCol].month, weekCells[startCol].day)
-    const ek = formatYmdKey(weekCells[endCol].year, weekCells[endCol].month, weekCells[endCol].day)
     segments.push({
       id: e.id,
       title: (e.title && String(e.title).trim()) || '일정',
       startCol,
       endCol,
       color: getCategoryColor(categories, e.category),
-      globalStart: sk === e.date,
-      globalEnd: ek === e.endDate,
     })
   }
   segments.sort((a, b) => a.startCol - b.startCol || a.id - b.id)
@@ -602,32 +598,8 @@ export default function HomePage() {
           </div>
           {calWeeks.map((weekCells, wIdx) => {
             const segs = getWeekRangeTitleSegments(weekCells, events, eventCategories)
-            const hasLanes = segs.length > 0
             return (
               <div key={`week-${wIdx}`} className="home__calWeekOuter">
-                {hasLanes && (
-                  <div className="home__calWeekLanes">
-                    {segs.map((seg) => (
-                      <div key={seg.id} className="home__calWeekLaneRow">
-                        <div
-                          className="home__calRangeTitleBar"
-                          style={{
-                            gridColumn: `${seg.startCol + 1} / ${seg.endCol + 2}`,
-                            background: `color-mix(in srgb, ${seg.color} 42%, var(--surface))`,
-                            borderColor: seg.color,
-                            borderTopLeftRadius: seg.globalStart ? 6 : 0,
-                            borderBottomLeftRadius: seg.globalStart ? 6 : 0,
-                            borderTopRightRadius: seg.globalEnd ? 6 : 0,
-                            borderBottomRightRadius: seg.globalEnd ? 6 : 0,
-                          }}
-                          title={seg.title}
-                        >
-                          <span className="home__calRangeTitleBar__text">{seg.title}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
                 <div className="home__calWeekCells">
                   {weekCells.map((cell, colIdx) => {
                     const idx = wIdx * 7 + colIdx
@@ -636,6 +608,7 @@ export default function HomePage() {
                     const chipEvents = dayEvents.filter((ev) => (ev.eventType || 'single') !== 'range')
                     const isToday = key === todayKey
                     const isSelectedDay = key === selectedDayKey
+                    const stripsForCell = segs.filter((seg) => colIdx >= seg.startCol && colIdx <= seg.endCol)
 
                     return (
                       <button
@@ -672,6 +645,33 @@ export default function HomePage() {
                             )
                           })}
                         </div>
+                        {stripsForCell.length > 0 && (
+                          <div className="home__calCellRangeStrips">
+                            {stripsForCell.map((seg) => {
+                              const isSegLeft = colIdx === seg.startCol
+                              const isSegRight = colIdx === seg.endCol
+                              return (
+                                <div
+                                  key={`${seg.id}-strip`}
+                                  className="home__calCellRangeStrip"
+                                  style={{
+                                    background: `color-mix(in srgb, ${seg.color} 40%, var(--surface))`,
+                                    borderColor: seg.color,
+                                    borderTopLeftRadius: isSegLeft ? 5 : 0,
+                                    borderBottomLeftRadius: isSegLeft ? 5 : 0,
+                                    borderTopRightRadius: isSegRight ? 5 : 0,
+                                    borderBottomRightRadius: isSegRight ? 5 : 0,
+                                  }}
+                                  title={seg.title}
+                                >
+                                  {isSegLeft && (
+                                    <span className="home__calCellRangeStrip__text">{seg.title}</span>
+                                  )}
+                                </div>
+                              )
+                            })}
+                          </div>
+                        )}
                       </button>
                     )
                   })}

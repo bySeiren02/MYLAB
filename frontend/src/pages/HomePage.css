@@ -138,9 +138,9 @@
   text-align: left;
 }
 
-/* 날짜 + 일정 칩(Compact 셀보다 약간 높게) */
+/* 날짜 + 일정 칩 + 셀 하단 기간 막대 */
 .home__cal .compact-cal__cell.home__calCell--chips {
-  min-height: 4.25rem;
+  min-height: 4.6rem;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
@@ -152,40 +152,42 @@
   padding-top: 2px;
   width: 100%;
   align-items: stretch;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
-.home__calWeekLanes {
+.home__calCellRangeStrips {
+  width: 100%;
+  margin-top: auto;
+  padding-top: 3px;
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 3px;
+  flex-shrink: 0;
 }
 
-.home__calWeekLaneRow {
-  display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 0.35rem;
-  min-height: 0;
-  align-items: stretch;
-}
-
-.home__cal .home__calRangeTitleBar {
+.home__calCellRangeStrip {
+  width: 100%;
+  min-height: 15px;
+  max-height: 2.1rem;
+  border: 1px solid;
   display: flex;
   align-items: center;
-  min-width: 0;
-  padding: 2px 5px;
-  border: 1px solid;
+  justify-content: center;
+  padding: 1px 4px;
   box-sizing: border-box;
-  font-size: 0.65rem;
-  font-weight: 600;
-  line-height: 1.2;
-  overflow: hidden;
 }
 
-.home__cal .home__calRangeTitleBar__text {
+.home__calCellRangeStrip__text {
+  font-size: 0.56rem;
+  font-weight: 600;
+  line-height: 1.15;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  min-width: 0;
+  max-width: 100%;
+  color: var(--text);
+  text-align: center;
 }
 
 .home__panelEventBtn {
