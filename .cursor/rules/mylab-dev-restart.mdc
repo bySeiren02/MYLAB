@@ -1,0 +1,16 @@
+---
+description: 프론트/백 개발 서버 재시작 (에이전트가 직접 실행)
+alwaysApply: true
+---
+
+# 개발 서버 재실행
+
+`vite.config`·`.env`·`package.json`·Spring `application*.yml`·`pom.xml`·보안/프록시 설정을 바꿔 **HMR이나 자동 반영으로 부족**하거나, 포트/프로세스 문제가 있으면 **사용자에게 명령만 알려주지 말고** 에이전트가 터미널로 재실행한다.
+
+1. **상태 확인:** 터미널 메타(또는 `terminals` 정보)로 `npm run dev`, `vite`, `spring-boot:run`, `mvnw` 등이 이미 떠 있는지 본다.
+2. **재시작:** 같은 포트에 걸리면 기존 개발 서버를 종료한 뒤 다시 띄운다. 장기 실행은 **백그라운드**로 실행한다.
+3. **프론트 (Vite):** 저장소에 `frontend`가 있으면 (경로는 실제 구조에 맞게):
+   - `cd frontend && VITE_PROXY_TARGET=http://[::1]:8081 npm run dev`
+   - 백엔드 listen 주소/포트가 다르면 `VITE_PROXY_TARGET`을 그에 맞게 바꾼다.
+4. **백엔드 (Spring Boot):** `backend`에 `mvnw`가 있으면 `./mvnw spring-boot:run`, 없으면 `mvn -f backend/pom.xml spring-boot:run` 등 **프로젝트에 실제로 있는** 빌드 도구로 실행한다.
+5. **실패 시:** 로그를 읽고 포트/프로필/의존성 원인을 고친 뒤 한 번 더 시도한다.
