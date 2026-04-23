@@ -34,7 +34,7 @@ export default function LoginPage() {
     <div
       style={{
         flex: 1,
-        minHeight: 'auto',
+        minHeight: 0,
         overflowY: 'auto',
         overflowX: 'hidden',
         display: 'flex',
