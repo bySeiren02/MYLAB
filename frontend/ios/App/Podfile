@@ -1,0 +1,20 @@
+# 가장 안전한 표준 경로 설정이야!
+platform :ios, '13.0'
+use_frameworks!
+
+target 'App' do
+  # capacitor_pods 대신 직접 경로를 지정해서 에러를 피하자!
+  pod 'Capacitor', :path => '../../node_modules/@capacitor/ios'
+  pod 'CapacitorCordova', :path => '../../node_modules/@capacitor/ios'
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      # 1. 헤더 에러 해결
+      config.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
+      # 2. 샌드박스 에러 예방
+      config.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
+    end
+  end
+end

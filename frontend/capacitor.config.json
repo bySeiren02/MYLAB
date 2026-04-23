@@ -1,0 +1,8 @@
+{
+  "appId": "com.byseiren.mylab",
+  "appName": "MyLab",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}
