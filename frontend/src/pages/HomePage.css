@@ -20,14 +20,6 @@
   flex-direction: column;
 }
 
-.home__cal .home__calHead {
-  flex-shrink: 0;
-}
-
-.home__cal .home__hint {
-  flex-shrink: 0;
-}
-
 .home__compact {
   display: grid;
   gap: 0.75rem;
@@ -109,144 +101,81 @@
   font-size: 0.95rem;
 }
 
-.home__cal {
-  border: 1px solid var(--border);
-  background: var(--surface);
-  border-radius: 12px;
-  padding: 0.75rem;
-}
-
-.home__calHead {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-}
-
-.home__calTitle {
-  font-weight: 700;
-  color: var(--primary);
-}
-
-.home__nav {
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 999px;
+/* 투두·가계부와 동일한 CompactCalendar 스타일 (타 페이지와 통일) */
+.home__cal.compact-cal {
   border: none;
-  background: var(--primary);
-  color: #fff;
-  font-size: 1.1rem;
-}
-
-.home__hint {
-  margin-top: 0.75rem;
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  line-height: 1.4;
-}
-
-/* 홈 메인 달력만: 격자 간격 없이 한 줄 구분선, 기간 막대가 끊기지 않게 */
-.home__cal .calendar-grid.home__calendarGrid {
-  flex: none;
-  width: 100%;
-  min-height: min(62dvh, 560px);
-  gap: 0;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  /* hidden이면 기간 막대/칩이 많을 때 맨 아래 주가 잘림 */
-  overflow: visible;
-  background: var(--bg);
-  /* 요일 행 auto, 각 주는 최소 높이 보장 후 내용만큼 늘어남(스크롤로 전체 표시) */
-  grid-template-rows: auto;
-  grid-auto-rows: minmax(4.25rem, auto);
-  align-content: start;
-}
-
-/* 한 주 = (선택) 기간 막대 행(auto) + 날짜 7칸(남은 높이) */
-.home__cal .calendar-grid.home__calendarGrid > .home__calWeekBlock {
-  display: grid;
-  grid-column: 1 / -1;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  min-height: 0;
-  align-self: stretch;
-}
-
-@supports (grid-template-columns: subgrid) {
-  .home__cal .calendar-grid.home__calendarGrid > .home__calWeekBlock {
-    grid-template-columns: subgrid;
-  }
-}
-
-.home__cal .calendar-grid.home__calendarGrid > .home__calWeekBlock--hasLanes {
-  grid-template-rows: auto minmax(0, 1fr);
-}
-
-.home__cal .calendar-grid.home__calendarGrid > .home__calWeekBlock:not(.home__calWeekBlock--hasLanes) {
-  grid-template-rows: minmax(0, 1fr);
-}
-
-.home__cal .calendar-grid.home__calendarGrid > .calendar-weekday {
-  border-right: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  padding: 0.4rem 0.2rem 0.35rem;
+  background: transparent;
+  padding: 0;
   margin: 0;
+  flex-shrink: 0;
 }
 
-.home__cal .calendar-grid.home__calendarGrid > .calendar-weekday:nth-child(7n) {
-  border-right: none;
+.home__calMain {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
 }
 
-.home__cal .calendar-grid.home__calendarGrid > .home__calWeekBlock > .calendar-cell.home__calCell {
-  border: none;
-  border-right: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  border-radius: 0;
-  box-shadow: none;
-}
-
-.home__cal .calendar-grid.home__calendarGrid > .home__calWeekBlock > .calendar-cell.home__calCell--rowEnd {
-  border-right: none;
-}
-
-.home__cal .calendar-grid.home__calendarGrid > .home__calWeekBlock > .calendar-cell.home__calCell--lastRow {
-  border-bottom: none;
-}
-
-/* 주 단위 기간 막대(제목): 부모 7열과 동일 폭으로 이어짐 */
-.home__cal .calendar-grid.home__calendarGrid > .home__calWeekBlock > .home__calWeekLanes {
-  grid-column: 1 / -1;
+.home__calWeekdayRow,
+.home__calWeekCells {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 0;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg);
-  padding: 2px 0 2px;
-  row-gap: 2px;
+  gap: 0.35rem;
 }
 
-.home__cal .home__calWeekLaneRow {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: subgrid;
+.home__calWeekOuter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.home__cal .home__calWeekCells > .compact-cal__cell {
+  width: 100%;
+  box-sizing: border-box;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+/* 날짜 + 일정 칩(Compact 셀보다 약간 높게) */
+.home__cal .compact-cal__cell.home__calCell--chips {
+  min-height: 4.25rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0.18rem 2px 0.28rem;
+}
+
+.home__cal .compact-cal__cell.home__calCell--chips .home__eventChips {
+  margin-top: 0;
+  padding-top: 2px;
+  width: 100%;
   align-items: stretch;
-  min-height: 0;
 }
 
-@supports not (grid-template-columns: subgrid) {
-  .home__cal .home__calWeekLaneRow {
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-  }
+.home__calWeekLanes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.home__calWeekLaneRow {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.35rem;
+  min-height: 0;
+  align-items: stretch;
 }
 
 .home__cal .home__calRangeTitleBar {
   display: flex;
   align-items: center;
   min-width: 0;
-  padding: 2px 6px;
+  padding: 2px 5px;
   border: 1px solid;
-  border-radius: 0;
   box-sizing: border-box;
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 600;
   line-height: 1.2;
   overflow: hidden;
@@ -257,13 +186,6 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   min-width: 0;
-}
-
-.home__calCell {
-  min-height: 2.75rem;
-  height: 100%;
-  padding: 2px 1px 4px;
-  border-radius: 6px;
 }
 
 .home__panelEventBtn {
@@ -452,37 +374,6 @@ button.calendar-cell {
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-}
-
-.calendar-cell.today {
-  border-color: rgba(255, 135, 161, 0.85);
-}
-
-.calendar-cell.selected {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 1px rgba(255, 135, 161, 0.35) inset;
-}
-
-/* 홈 메인 달력: 테두리 격자와 맞춤 (위에서 border 제거됨) */
-/* 오늘만: 하단 강조 한 줄 (선택된 날과 겹치지 않을 때만) */
-.home__cal .calendar-grid.home__calendarGrid > .home__calWeekBlock > .calendar-cell.today:not(.selected) {
-  background: transparent;
-  box-shadow: none;
-  border-bottom: 2px solid color-mix(in srgb, var(--primary) 72%, transparent);
-}
-
-.home__cal .calendar-grid.home__calendarGrid > .home__calWeekBlock > .calendar-cell.selected {
-  position: relative;
-  z-index: 1;
-  background: color-mix(in srgb, var(--primary) 16%, transparent);
-  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--primary) 45%, transparent);
-}
-
-/* 오늘이면서 선택됨: 선택 스타일 하나로만 */
-.home__cal .calendar-grid.home__calendarGrid > .home__calWeekBlock > .calendar-cell.today.selected {
-  background: color-mix(in srgb, var(--primary) 18%, transparent);
-  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--primary) 52%, transparent);
-  border-bottom: none;
 }
 
 @media (orientation: landscape) {

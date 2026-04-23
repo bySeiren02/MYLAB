@@ -18,6 +18,7 @@ import {
   SETTINGS_PREVIEW_DISCARD,
 } from '../utils/settingsPreview'
 import DatePickButton from '../components/DatePickButton'
+import '../components/CompactCalendar.css'
 import './HomePage.css'
 
 /** 한 주(7칸) 안에서 기간 일정을 가로 한 줄 막대로 묶음 (제목 표시) */
@@ -580,31 +581,30 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="home__cal">
-        <div className="home__calHead">
-          <button type="button" className="home__nav" onClick={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1))}>
+      <section className="home__cal compact-cal">
+        <div className="compact-cal__header">
+          <button type="button" className="compact-cal__nav" onClick={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1))}>
             ‹
           </button>
-          <div className="home__calTitle">{formatMonthLabel(viewDate)}</div>
-          <button type="button" className="home__nav" onClick={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1))}>
+          <div className="compact-cal__title">{formatMonthLabel(viewDate)}</div>
+          <button type="button" className="compact-cal__nav" onClick={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1))}>
             ›
           </button>
         </div>
 
-        <div className="calendar-grid home__calendarGrid" style={{ marginTop: '0.5rem' }}>
-          {weekdays.map((w) => (
-            <div key={w} className="calendar-weekday">
-              {w}
-            </div>
-          ))}
+        <div className="home__calMain">
+          <div className="home__calWeekdayRow">
+            {weekdays.map((w) => (
+              <div key={w} className="compact-cal__weekday">
+                {w}
+              </div>
+            ))}
+          </div>
           {calWeeks.map((weekCells, wIdx) => {
             const segs = getWeekRangeTitleSegments(weekCells, events, eventCategories)
             const hasLanes = segs.length > 0
             return (
-              <div
-                key={`week-${wIdx}`}
-                className={['home__calWeekBlock', hasLanes ? 'home__calWeekBlock--hasLanes' : ''].filter(Boolean).join(' ')}
-              >
+              <div key={`week-${wIdx}`} className="home__calWeekOuter">
                 {hasLanes && (
                   <div className="home__calWeekLanes">
                     {segs.map((seg) => (
@@ -628,54 +628,54 @@ export default function HomePage() {
                     ))}
                   </div>
                 )}
-              {weekCells.map((cell, colIdx) => {
-                const idx = wIdx * 7 + colIdx
-                const key = formatYmdKey(cell.year, cell.month, cell.day)
-                const dayEvents = getEventsForDate(events, key)
-                const chipEvents = dayEvents.filter((ev) => (ev.eventType || 'single') !== 'range')
-                const isToday = key === todayKey
-                const isSelectedDay = key === selectedDayKey
+                <div className="home__calWeekCells">
+                  {weekCells.map((cell, colIdx) => {
+                    const idx = wIdx * 7 + colIdx
+                    const key = formatYmdKey(cell.year, cell.month, cell.day)
+                    const dayEvents = getEventsForDate(events, key)
+                    const chipEvents = dayEvents.filter((ev) => (ev.eventType || 'single') !== 'range')
+                    const isToday = key === todayKey
+                    const isSelectedDay = key === selectedDayKey
 
-                return (
-                  <button
-                    key={`${key}-${idx}`}
-                    type="button"
-                    className={[
-                      'calendar-cell',
-                      'home__calCell',
-                      colIdx === 6 ? 'home__calCell--rowEnd' : '',
-                      wIdx === calWeeks.length - 1 ? 'home__calCell--lastRow' : '',
-                      cell.isOtherMonth ? 'dim' : '',
-                      isToday ? 'today' : '',
-                      isSelectedDay ? 'selected' : '',
-                    ]
-                      .filter(Boolean)
-                      .join(' ')}
-                    onClick={() => handleDayClick(cell)}
-                  >
-                    <div style={{ fontWeight: 600 }}>{cell.day}</div>
-                    <div className="home__eventChips">
-                      {chipEvents.slice(0, 2).map((ev) => {
-                        const c = getCategoryColor(eventCategories, ev.category)
-                        return (
-                          <div
-                            key={`${ev.id}-${ev._occurrenceDate || ''}`}
-                            className="home__eventChip"
-                            style={{
-                              color: 'var(--text)',
-                              background: `${c}26`,
-                              border: `1px solid ${c}55`,
-                            }}
-                            title={ev.title}
-                          >
-                            {ev.title}
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </button>
-                )
-              })}
+                    return (
+                      <button
+                        key={`${key}-${idx}`}
+                        type="button"
+                        className={[
+                          'compact-cal__cell',
+                          'home__calCell--chips',
+                          cell.isOtherMonth ? 'compact-cal__cell--muted' : '',
+                          isToday ? 'compact-cal__cell--today' : '',
+                          isSelectedDay ? 'compact-cal__cell--selected' : '',
+                        ]
+                          .filter(Boolean)
+                          .join(' ')}
+                        onClick={() => handleDayClick(cell)}
+                      >
+                        <div style={{ fontWeight: 600, lineHeight: 1.2 }}>{cell.day}</div>
+                        <div className="home__eventChips">
+                          {chipEvents.slice(0, 2).map((ev) => {
+                            const c = getCategoryColor(eventCategories, ev.category)
+                            return (
+                              <div
+                                key={`${ev.id}-${ev._occurrenceDate || ''}`}
+                                className="home__eventChip"
+                                style={{
+                                  color: 'var(--text)',
+                                  background: `${c}26`,
+                                  border: `1px solid ${c}55`,
+                                }}
+                                title={ev.title}
+                              >
+                                {ev.title}
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </button>
+                    )
+                  })}
+                </div>
               </div>
             )
           })}
