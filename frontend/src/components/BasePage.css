@@ -1,24 +1,23 @@
 .app-shell {
-  flex: 1;
-  min-height: 0;
+  flex: 0 0 auto;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   background: var(--bg);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .app-main {
-  flex: 1;
-  min-height: 0;
+  flex: 0 0 auto;
+  min-height: auto;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  overflow-y: visible;
   overscroll-behavior: contain;
   padding-top: max(1rem, env(safe-area-inset-top, 0px));
   padding-right: max(env(safe-area-inset-right, 0px), 0.7rem);
-  padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(var(--bottom-nav-height, 5.5rem) + env(safe-area-inset-bottom, 0px) + 0.25rem);
   padding-left: max(env(safe-area-inset-left, 0px), 0.7rem);
   max-width: none;
   margin: 0;
@@ -26,8 +25,8 @@
 }
 
 .app-page {
-  flex: 1 1 auto;
-  min-height: 0;
+  flex: 0 0 auto;
+  min-height: auto;
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -35,8 +34,8 @@
 }
 
 .app-page > * {
-  flex: 1 1 auto;
-  min-height: 0;
+  flex: 0 0 auto;
+  min-height: auto;
   min-width: 0;
   overflow: visible;
   display: flex;
@@ -89,7 +88,7 @@
   position: fixed;
   left: 0;
   right: 0;
-  bottom: calc(4.25rem + env(safe-area-inset-bottom, 0px));
+  bottom: var(--bottom-nav-height, calc(4.25rem + env(safe-area-inset-bottom, 0px)));
   max-height: 55vh;
   max-height: min(55vh, 55dvh);
   overflow: hidden;
@@ -132,7 +131,10 @@
 .modal {
   width: 100%;
   max-width: 520px;
-  max-height: min(90vh, 90dvh);
+  max-height: min(
+    92svh,
+    calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 1.5rem)
+  );
   margin: auto 0;
   overflow-x: hidden;
   overflow-y: auto;
@@ -144,11 +146,14 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 14px;
-  padding: 1.25rem;
+  padding: 1.25rem 1.25rem calc(1.25rem + env(safe-area-inset-bottom, 0px));
 }
 
 .settings-modal {
-  max-height: min(92vh, 720px);
+  max-height: min(
+    720px,
+    calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 1.25rem)
+  );
   margin: auto 0;
   display: flex;
   flex-direction: column;
@@ -419,7 +424,7 @@
     padding-top: max(0.7rem, env(safe-area-inset-top, 0px));
     padding-right: max(0.9rem, env(safe-area-inset-right, 0px));
     padding-left: max(0.9rem, env(safe-area-inset-left, 0px));
-    padding-bottom: calc(4.6rem + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(var(--bottom-nav-height, 4.6rem) + env(safe-area-inset-bottom, 0px) + 0.2rem);
   }
 
   .top-user-bar {
