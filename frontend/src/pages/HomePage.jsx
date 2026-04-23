@@ -285,7 +285,7 @@ export default function HomePage() {
     setShowRepeatScopeModal(false)
     setEditingContext(null)
     pendingSaveRef.current = null
-    if (panelKey) setPanelOpen(true)
+    setPanelOpen(false)
   }
 
   const trySubmit = () => {
@@ -312,6 +312,7 @@ export default function HomePage() {
     setEditingContext(null)
     pendingSaveRef.current = null
     rangeSecondClickPendingRef.current = false
+    setPanelOpen(false)
   }
 
   const handleMainModalOverlay = (e) => {
