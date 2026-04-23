@@ -1,80 +1,39 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { useClickOutside } from '../hooks/useClickOutside'
+import { getMenuCategories } from '../utils/menuCategories'
 import './BottomMenu.css'
-
-const categories = [
-  {
-    id: 'plan',
-    label: '계획',
-    icon: '📋',
-    items: [
-      { to: '/daily-todo', label: '투두리스트' },
-      { to: '/monthly-goal', label: '월 목표' },
-      { to: '/yearly-goal', label: '연 목표' },
-    ],
-  },
-  {
-    id: 'body',
-    label: '몸',
-    icon: '💪',
-    items: [
-      { to: '/diet', label: '식단/운동/러닝' },
-      { to: '/period', label: '생리' },
-    ],
-  },
-  {
-    id: 'care',
-    label: '관리',
-    icon: '✨',
-    items: [
-      { to: '/supplements', label: '영양제' },
-      { to: '/skincare', label: '피부관리' },
-      { to: '/procedure', label: '시술' },
-      { to: '/dermatology', label: '피부과' },
-    ],
-  },
-  {
-    id: 'grow',
-    label: '성장',
-    icon: '📚',
-    items: [
-      { to: '/study-plan', label: '공부' },
-      { to: '/reading', label: '독서' },
-    ],
-  },
-  {
-    id: 'culture_log',
-    label: '감상 기록',
-    icon: '🎭',
-    items: [
-      { to: '/movie-drama', label: '시청·공연' },
-      { to: '/cultural', label: '전시·나들이' },
-      { to: '/fiction', label: '소설·웹툰' },
-    ],
-  },
-  {
-    id: 'date',
-    label: '데이트',
-    icon: '💖',
-    directTo: '/date',
-    items: [{ to: '/date', label: '데이트 캘린더' }],
-  },
-  {
-    id: 'daily',
-    label: '일',
-    icon: '🗒️',
-    items: [
-      { to: '/ledger', label: '가계부' },
-      { to: '/side-hustle', label: '부업' },
-    ],
-  },
-]
 
 export default function BottomMenu() {
   const location = useLocation()
   const [open, setOpen] = useState(null)
+  const [categories, setCategories] = useState(() => getMenuCategories())
   const ref = useClickOutside(open !== null, () => setOpen(null))
+  useEffect(() => {
+    const nav = ref.current
+    if (!nav) return undefined
+
+    const setBottomNavHeight = () => {
+      document.documentElement.style.setProperty('--bottom-nav-height', `${nav.offsetHeight}px`)
+    }
+
+    setBottomNavHeight()
+    const resizeObserver =
+      typeof ResizeObserver !== 'undefined' ? new ResizeObserver(setBottomNavHeight) : null
+    resizeObserver?.observe(nav)
+    window.addEventListener('resize', setBottomNavHeight)
+    return () => {
+      resizeObserver?.disconnect()
+      window.removeEventListener('resize', setBottomNavHeight)
+      document.documentElement.style.removeProperty('--bottom-nav-height')
+    }
+  }, [ref])
+
+  useEffect(() => {
+    const sync = () => setCategories(getMenuCategories())
+    window.addEventListener('mylab-menu-categories-changed', sync)
+    return () => window.removeEventListener('mylab-menu-categories-changed', sync)
+  }, [])
 
   const isActiveCategory = (cat) => cat.items.some((i) => location.pathname === i.to)
 

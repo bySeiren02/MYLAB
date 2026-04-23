@@ -82,13 +82,13 @@ export default function DatePage() {
     <div>
       <div className="page-route-body">
       <div className="page-title-row">
-        <h1>데이트</h1>
+        <h1>커플</h1>
       </div>
 
       <div className="card">
         <div className="form-group">
           <DatePickButton
-            label="언제부터 만났나요? (시작일)"
+            label="우리 시작일"
             value={relationshipStart}
             onChange={(v) => {
               setRelationshipStart(v)
@@ -105,17 +105,17 @@ export default function DatePage() {
       <CompactCalendar currentDate={currentDate} selectedDate={currentDate} highlightDates={highlightDates} onDateChange={(d) => setCurrentDate(d)} />
 
       <div className="card">
-        <div style={{ fontWeight: 700, marginBottom: '0.75rem' }}>{formatDate(currentDate)} 데이트 기록</div>
+        <div style={{ fontWeight: 700, marginBottom: '0.75rem' }}>{formatDate(currentDate)} 커플 기록</div>
         <div className="form-group">
-          <label>장소</label>
+          <label>어디서</label>
           <input value={record.place} onChange={(e) => saveRecord({ ...record, place: e.target.value })} placeholder="" />
         </div>
         <div className="form-group">
-          <label>식당</label>
+          <label>무엇을 먹었는지</label>
           <input value={record.restaurant} onChange={(e) => saveRecord({ ...record, restaurant: e.target.value })} placeholder="" />
         </div>
         <div className="form-group">
-          <label>기분</label>
+          <label>그날 기분</label>
           <input value={record.mood} onChange={(e) => saveRecord({ ...record, mood: e.target.value })} placeholder="" />
         </div>
         <div className="form-group">

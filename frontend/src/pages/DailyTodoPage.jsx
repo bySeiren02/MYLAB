@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { getStorage, setStorage, listStorageKeysByPrefix } from '../utils/storage'
 import { useDateNavigation } from '../hooks/useDateNavigation'
 import CompactCalendar from '../components/CompactCalendar'
+import { getDailyTodoRoutines, setDailyTodoRoutines } from '../utils/routinePresets'
 
 export default function DailyTodoPage() {
   const { currentDate, setCurrentDate, dateKey } = useDateNavigation()
@@ -12,7 +13,10 @@ export default function DailyTodoPage() {
   const [showRoutine, setShowRoutine] = useState(false)
 
   useEffect(() => {
-    setRoutines(getStorage('daily_todo_routines', []))
+    setRoutines(getDailyTodoRoutines())
+    const sync = () => setRoutines(getDailyTodoRoutines())
+    window.addEventListener('mylab-daily-routines-changed', sync)
+    return () => window.removeEventListener('mylab-daily-routines-changed', sync)
   }, [])
 
   useEffect(() => {
@@ -55,8 +59,7 @@ export default function DailyTodoPage() {
     if (!routineText.trim()) return
     const r = { id: Date.now(), text: routineText.trim() }
     const nextR = [...routines, r]
-    setStorage('daily_todo_routines', nextR)
-    setRoutines(nextR)
+    setDailyTodoRoutines(nextR)
     setRoutineText('')
     setShowRoutine(false)
     persist([
@@ -67,8 +70,7 @@ export default function DailyTodoPage() {
 
   const deleteRoutine = (id) => {
     const nextR = routines.filter((r) => r.id !== id)
-    setStorage('daily_todo_routines', nextR)
-    setRoutines(nextR)
+    setDailyTodoRoutines(nextR)
   }
 
   const highlightDates = useMemo(() => {

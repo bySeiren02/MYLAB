@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { getStorage, setStorage, listStorageKeysByPrefix } from '../utils/storage'
 import { useDateNavigation } from '../hooks/useDateNavigation'
 import CompactCalendar from '../components/CompactCalendar'
+import { getSupplementsRoutines, setSupplementsRoutines } from '../utils/routinePresets'
 
 export default function SupplementsPage() {
   const { currentDate, setCurrentDate, dateKey } = useDateNavigation()
@@ -12,7 +13,10 @@ export default function SupplementsPage() {
   const [showRoutine, setShowRoutine] = useState(false)
 
   useEffect(() => {
-    setRoutines(getStorage('supplements_routines', []))
+    setRoutines(getSupplementsRoutines())
+    const sync = () => setRoutines(getSupplementsRoutines())
+    window.addEventListener('mylab-supplements-routines-changed', sync)
+    return () => window.removeEventListener('mylab-supplements-routines-changed', sync)
   }, [])
 
   useEffect(() => {
@@ -44,8 +48,7 @@ export default function SupplementsPage() {
     if (!routineText.trim()) return
     const r = { id: Date.now(), name: routineText.trim() }
     const nextR = [...routines, r]
-    setStorage('supplements_routines', nextR)
-    setRoutines(nextR)
+    setSupplementsRoutines(nextR)
     setRoutineText('')
     setShowRoutine(false)
     persist([...items, { id: Date.now() + Math.random(), name: r.name, taken: false, isRoutine: true, routineId: r.id }])
@@ -53,8 +56,7 @@ export default function SupplementsPage() {
 
   const deleteRoutine = (id) => {
     const nextR = routines.filter((r) => r.id !== id)
-    setStorage('supplements_routines', nextR)
-    setRoutines(nextR)
+    setSupplementsRoutines(nextR)
   }
 
   const highlightDates = useMemo(() => {

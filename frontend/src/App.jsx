@@ -19,6 +19,7 @@ import CulturalPage from './pages/CulturalPage'
 import MovieDramaPage from './pages/MovieDramaPage'
 import FictionWebtoonPage from './pages/FictionWebtoonPage'
 import DatePage from './pages/DatePage'
+import DdayPage from './pages/DdayPage'
 import LedgerPage from './pages/LedgerPage'
 import SideHustlePage from './pages/SideHustlePage'
 
@@ -57,6 +58,7 @@ export default function App() {
         <Route path="/cultural" element={<CulturalPage />} />
         <Route path="/fiction" element={<FictionWebtoonPage />} />
         <Route path="/date" element={<DatePage />} />
+        <Route path="/dday" element={<DdayPage />} />
         <Route path="/ledger" element={<LedgerPage />} />
         <Route path="/side-hustle" element={<SideHustlePage />} />
       </Route>

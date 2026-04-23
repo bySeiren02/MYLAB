@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { getStorage, setStorage, listStorageKeysByPrefix } from '../utils/storage'
 import { useDateNavigation } from '../hooks/useDateNavigation'
 import CompactCalendar from '../components/CompactCalendar'
+import { getSideHustleCategories } from '../utils/sideHustleCategories'
 
 const STORAGE_PREFIX = 'side_hustle_'
 
@@ -9,10 +10,23 @@ export default function SideHustlePage() {
   const { currentDate, setCurrentDate, dateKey } = useDateNavigation()
   const [todos, setTodos] = useState([])
   const [text, setText] = useState('')
+  const [category, setCategory] = useState('')
+  const [categoryOptions, setCategoryOptions] = useState(() => getSideHustleCategories())
 
   useEffect(() => {
     setTodos(getStorage(`${STORAGE_PREFIX}${dateKey}`, []))
   }, [dateKey])
+
+  useEffect(() => {
+    const sync = () => {
+      const next = getSideHustleCategories()
+      setCategoryOptions(next)
+      setCategory((prev) => prev || next[0] || '')
+    }
+    sync()
+    window.addEventListener('mylab-side-hustle-categories-changed', sync)
+    return () => window.removeEventListener('mylab-side-hustle-categories-changed', sync)
+  }, [])
 
   const persist = (next) => {
     setStorage(`${STORAGE_PREFIX}${dateKey}`, next)
@@ -29,7 +43,8 @@ export default function SideHustlePage() {
 
   const add = () => {
     if (!text.trim()) return
-    persist([...todos, { id: Date.now(), text: text.trim(), completed: false }])
+    const safeCategory = category || categoryOptions[0] || '기타'
+    persist([...todos, { id: Date.now(), text: text.trim(), category: safeCategory, completed: false }])
     setText('')
   }
 
@@ -49,6 +64,24 @@ export default function SideHustlePage() {
         <CompactCalendar currentDate={currentDate} selectedDate={currentDate} highlightDates={highlightDates} onDateChange={(d) => setCurrentDate(d)} />
 
         <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0, marginTop: '0.35rem' }}>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            style={{
+              width: '7.8rem',
+              padding: '0.65rem 0.55rem',
+              borderRadius: 10,
+              border: '1px solid var(--border)',
+              background: 'var(--surface)',
+              color: 'var(--text)',
+            }}
+          >
+            {categoryOptions.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
           <input
             className="form-group"
             style={{
@@ -77,6 +110,17 @@ export default function SideHustlePage() {
               {todos.map((t) => (
                 <div key={t.id} className="item-row">
                   <input type="checkbox" checked={!!t.completed} onChange={() => toggle(t.id)} />
+                  <select
+                    value={t.category || categoryOptions[0] || '기타'}
+                    onChange={(e) => persist(todos.map((x) => (x.id === t.id ? { ...x, category: e.target.value } : x)))}
+                    style={{ maxWidth: '7.5rem', fontSize: '0.82rem' }}
+                  >
+                    {categoryOptions.map((c) => (
+                      <option key={c} value={c}>
+                        {c}
+                      </option>
+                    ))}
+                  </select>
                   <input
                     type="text"
                     value={t.text}

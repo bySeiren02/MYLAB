@@ -6,6 +6,14 @@ import { applyUiSettings, FONT_OPTIONS, THEME_PRESETS } from '../utils/theme'
 import { APP_ICON_VARIANTS, appIconMarkHex, syncNativeAppIcon } from '../utils/appIcon'
 import { getTitleFavorites, MAX_TITLE_FAVORITES, setTitleFavorites } from '../utils/eventTitleFavorites'
 import { getEventCategories, setEventCategories } from '../utils/eventCategories'
+import { getMenuCategories, setMenuCategories } from '../utils/menuCategories'
+import { getSideHustleCategories, setSideHustleCategories } from '../utils/sideHustleCategories'
+import {
+  getDailyTodoRoutines,
+  getSupplementsRoutines,
+  setDailyTodoRoutines,
+  setSupplementsRoutines,
+} from '../utils/routinePresets'
 import {
   dispatchCategoriesPreview,
   dispatchFavoritesPreview,
@@ -35,6 +43,10 @@ export default function BasePageLayout() {
   const [eventFavList, setEventFavList] = useState([])
   const [eventFavDraft, setEventFavDraft] = useState('')
   const [categoryDraft, setCategoryDraft] = useState(() => getEventCategories())
+  const [menuCategoryDraft, setMenuCategoryDraft] = useState(() => getMenuCategories())
+  const [sideHustleCategoriesDraft, setSideHustleCategoriesDraft] = useState(() => getSideHustleCategories())
+  const [dailyTodoRoutineDraft, setDailyTodoRoutineDraft] = useState(() => getDailyTodoRoutines())
+  const [supplementsRoutineDraft, setSupplementsRoutineDraft] = useState(() => getSupplementsRoutines())
 
   useEffect(() => {
     const ui = normalizeUiSettings(getStorage('ui_settings', null))
@@ -79,6 +91,10 @@ export default function BasePageLayout() {
     await syncNativeAppIcon(next.appIconVariant || 'default')
     setTitleFavorites(eventFavList)
     setEventCategories(categoryDraft)
+    setMenuCategories(menuCategoryDraft)
+    setSideHustleCategories(sideHustleCategoriesDraft)
+    setDailyTodoRoutines(dailyTodoRoutineDraft)
+    setSupplementsRoutines(supplementsRoutineDraft)
     dispatchSettingsPreviewDiscard()
     closeSettings()
   }
@@ -90,6 +106,10 @@ export default function BasePageLayout() {
     setEventFavList([...getTitleFavorites()])
     setEventFavDraft('')
     setCategoryDraft(getEventCategories().map((c) => ({ ...c })))
+    setMenuCategoryDraft(getMenuCategories().map((cat) => ({ ...cat, items: cat.items.map((item) => ({ ...item })) })))
+    setSideHustleCategoriesDraft([...getSideHustleCategories()])
+    setDailyTodoRoutineDraft(getDailyTodoRoutines().map((x) => ({ ...x })))
+    setSupplementsRoutineDraft(getSupplementsRoutines().map((x) => ({ ...x })))
     setSettingsSection('menu')
     setShowSettings(true)
   }
@@ -118,7 +138,8 @@ export default function BasePageLayout() {
   const sectionTitles = {
     appearance: '화면',
     favorites: '일정 즐겨찾기',
-    categories: '일정 카테고리',
+    categoryManager: '카테고리 관리',
+    routinePresets: '루틴 관리',
   }
 
   return (
@@ -173,8 +194,14 @@ export default function BasePageLayout() {
                       ›
                     </span>
                   </button>
-                  <button type="button" className="settings-nav-item" onClick={() => setSettingsSection('categories')}>
-                    <span>일정 카테고리</span>
+                  <button type="button" className="settings-nav-item" onClick={() => setSettingsSection('categoryManager')}>
+                    <span>카테고리 관리</span>
+                    <span className="settings-nav-chevron" aria-hidden>
+                      ›
+                    </span>
+                  </button>
+                  <button type="button" className="settings-nav-item" onClick={() => setSettingsSection('routinePresets')}>
+                    <span>루틴 관리 항목</span>
                     <span className="settings-nav-chevron" aria-hidden>
                       ›
                     </span>
@@ -332,64 +359,193 @@ export default function BasePageLayout() {
                 </div>
               )}
 
-              {settingsSection === 'categories' && (
-                <div className="form-group" style={{ marginBottom: 0 }}>
-                  <label>이름 · 색상</label>
-                  <div style={{ display: 'grid', gap: '0.45rem', marginTop: '0.5rem' }}>
-                    {categoryDraft.map((c, i) => (
-                      <div
-                        key={c.id}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.5rem',
-                          padding: '0.35rem 0.45rem',
-                          border: '1px solid var(--border)',
-                          borderRadius: 10,
-                          background: 'var(--bg)',
-                        }}
+              {settingsSection === 'categoryManager' && (
+                <div className="form-group" style={{ marginBottom: 0, display: 'grid', gap: '0.8rem' }}>
+                  <div style={{ border: '1px solid var(--border)', borderRadius: 10, padding: '0.65rem', background: 'var(--bg)' }}>
+                    <div style={{ fontWeight: 700, marginBottom: '0.45rem' }}>일정 카테고리</div>
+                    <div style={{ display: 'grid', gap: '0.45rem' }}>
+                      {categoryDraft.map((c, i) => (
+                        <div key={c.id} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.35rem 0.45rem', border: '1px solid var(--border)', borderRadius: 10, background: 'var(--bg)' }}>
+                          <input
+                            type="color"
+                            aria-label={`${c.name || '카테고리'} 색상`}
+                            value={c.color}
+                            onChange={(e) => {
+                              const next = [...categoryDraft]
+                              next[i] = { ...next[i], color: e.target.value }
+                              setCategoryDraft(next)
+                            }}
+                            style={{ width: 40, height: 32, padding: 0, border: '1px solid var(--border)', borderRadius: 8, cursor: 'pointer', background: 'var(--surface)' }}
+                          />
+                          <input
+                            type="text"
+                            value={c.name}
+                            onChange={(e) => {
+                              const next = [...categoryDraft]
+                              next[i] = { ...next[i], name: e.target.value }
+                              setCategoryDraft(next)
+                            }}
+                            style={{ flex: 1, minWidth: 0, padding: '0.45rem 0.55rem', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text)', font: 'inherit', fontSize: '0.9rem' }}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div style={{ border: '1px solid var(--border)', borderRadius: 10, padding: '0.65rem', background: 'var(--bg)' }}>
+                    <div style={{ fontWeight: 700, marginBottom: '0.45rem' }}>하단 메뉴 카테고리</div>
+                    <div style={{ display: 'grid', gap: '0.6rem' }}>
+                      {menuCategoryDraft.map((cat, i) => (
+                        <div key={cat.id} style={{ border: '1px solid var(--border)', borderRadius: 10, padding: '0.55rem', background: 'var(--bg)', display: 'grid', gap: '0.45rem' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span style={{ fontSize: '1rem' }}>{cat.icon}</span>
+                            <input
+                              type="text"
+                              value={cat.label}
+                              onChange={(e) => {
+                                const next = [...menuCategoryDraft]
+                                next[i] = { ...next[i], label: e.target.value }
+                                setMenuCategoryDraft(next)
+                              }}
+                              style={{ flex: 1 }}
+                            />
+                          </div>
+                          <div style={{ display: 'grid', gap: '0.35rem' }}>
+                            {cat.items.map((item, itemIdx) => (
+                              <input
+                                key={item.to}
+                                type="text"
+                                value={item.label}
+                                onChange={(e) => {
+                                  const next = [...menuCategoryDraft]
+                                  const nextItems = [...next[i].items]
+                                  nextItems[itemIdx] = { ...nextItems[itemIdx], label: e.target.value }
+                                  next[i] = { ...next[i], items: nextItems }
+                                  setMenuCategoryDraft(next)
+                                }}
+                                style={{ fontSize: '0.88rem' }}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div style={{ border: '1px solid var(--border)', borderRadius: 10, padding: '0.65rem', background: 'var(--bg)' }}>
+                    <div style={{ fontWeight: 700, marginBottom: '0.45rem' }}>부업 카테고리</div>
+                    <div style={{ display: 'grid', gap: '0.45rem' }}>
+                      {sideHustleCategoriesDraft.map((name, idx) => (
+                        <div key={`${name}-${idx}`} style={{ display: 'flex', gap: '0.4rem' }}>
+                          <input
+                            type="text"
+                            value={name}
+                            onChange={(e) => {
+                              const next = [...sideHustleCategoriesDraft]
+                              next[idx] = e.target.value
+                              setSideHustleCategoriesDraft(next)
+                            }}
+                            style={{ flex: 1 }}
+                          />
+                          <button
+                            type="button"
+                            className="btn btn-danger"
+                            onClick={() => setSideHustleCategoriesDraft(sideHustleCategoriesDraft.filter((_, i) => i !== idx))}
+                          >
+                            삭제
+                          </button>
+                        </div>
+                      ))}
+                      <button
+                        type="button"
+                        className="btn btn-secondary"
+                        onClick={() => setSideHustleCategoriesDraft([...sideHustleCategoriesDraft, `카테고리 ${sideHustleCategoriesDraft.length + 1}`])}
                       >
-                        <input
-                          type="color"
-                          aria-label={`${c.name || '카테고리'} 색상`}
-                          value={c.color}
-                          onChange={(e) => {
-                            const next = [...categoryDraft]
-                            next[i] = { ...next[i], color: e.target.value }
-                            setCategoryDraft(next)
-                          }}
-                          style={{
-                            width: 40,
-                            height: 32,
-                            padding: 0,
-                            border: '1px solid var(--border)',
-                            borderRadius: 8,
-                            cursor: 'pointer',
-                            background: 'var(--surface)',
-                          }}
-                        />
-                        <input
-                          type="text"
-                          value={c.name}
-                          onChange={(e) => {
-                            const next = [...categoryDraft]
-                            next[i] = { ...next[i], name: e.target.value }
-                            setCategoryDraft(next)
-                          }}
-                          style={{
-                            flex: 1,
-                            minWidth: 0,
-                            padding: '0.45rem 0.55rem',
-                            borderRadius: 8,
-                            border: '1px solid var(--border)',
-                            background: 'var(--surface)',
-                            color: 'var(--text)',
-                            font: 'inherit',
-                            fontSize: '0.9rem',
-                          }}
-                        />
-                      </div>
-                    ))}
+                        카테고리 추가
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {settingsSection === 'routinePresets' && (
+                <div className="form-group" style={{ marginBottom: 0, display: 'grid', gap: '0.8rem' }}>
+                  <div style={{ border: '1px solid var(--border)', borderRadius: 10, padding: '0.65rem', background: 'var(--bg)' }}>
+                    <div style={{ fontWeight: 700, marginBottom: '0.45rem' }}>투두리스트 루틴</div>
+                    <div style={{ display: 'grid', gap: '0.35rem' }}>
+                      {dailyTodoRoutineDraft.map((r, idx) => (
+                        <div key={r.id} style={{ display: 'flex', gap: '0.4rem' }}>
+                          <input
+                            type="text"
+                            value={r.text}
+                            onChange={(e) => {
+                              const next = [...dailyTodoRoutineDraft]
+                              next[idx] = { ...next[idx], text: e.target.value }
+                              setDailyTodoRoutineDraft(next)
+                            }}
+                            style={{ flex: 1 }}
+                          />
+                          <button
+                            type="button"
+                            className="btn btn-danger"
+                            onClick={() => setDailyTodoRoutineDraft(dailyTodoRoutineDraft.filter((_, i) => i !== idx))}
+                          >
+                            삭제
+                          </button>
+                        </div>
+                      ))}
+                      <button
+                        type="button"
+                        className="btn btn-secondary"
+                        onClick={() =>
+                          setDailyTodoRoutineDraft([
+                            ...dailyTodoRoutineDraft,
+                            { id: Date.now() + Math.random(), text: `루틴 ${dailyTodoRoutineDraft.length + 1}` },
+                          ])
+                        }
+                      >
+                        투두 루틴 추가
+                      </button>
+                    </div>
+                  </div>
+
+                  <div style={{ border: '1px solid var(--border)', borderRadius: 10, padding: '0.65rem', background: 'var(--bg)' }}>
+                    <div style={{ fontWeight: 700, marginBottom: '0.45rem' }}>영양제 루틴</div>
+                    <div style={{ display: 'grid', gap: '0.35rem' }}>
+                      {supplementsRoutineDraft.map((r, idx) => (
+                        <div key={r.id} style={{ display: 'flex', gap: '0.4rem' }}>
+                          <input
+                            type="text"
+                            value={r.name}
+                            onChange={(e) => {
+                              const next = [...supplementsRoutineDraft]
+                              next[idx] = { ...next[idx], name: e.target.value }
+                              setSupplementsRoutineDraft(next)
+                            }}
+                            style={{ flex: 1 }}
+                          />
+                          <button
+                            type="button"
+                            className="btn btn-danger"
+                            onClick={() => setSupplementsRoutineDraft(supplementsRoutineDraft.filter((_, i) => i !== idx))}
+                          >
+                            삭제
+                          </button>
+                        </div>
+                      ))}
+                      <button
+                        type="button"
+                        className="btn btn-secondary"
+                        onClick={() =>
+                          setSupplementsRoutineDraft([
+                            ...supplementsRoutineDraft,
+                            { id: Date.now() + Math.random(), name: `루틴 ${supplementsRoutineDraft.length + 1}` },
+                          ])
+                        }
+                      >
+                        영양제 루틴 추가
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
