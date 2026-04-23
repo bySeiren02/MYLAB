@@ -626,25 +626,6 @@ export default function HomePage() {
                         onClick={() => handleDayClick(cell)}
                       >
                         <div style={{ fontWeight: 600, lineHeight: 1.2 }}>{cell.day}</div>
-                        <div className="home__eventChips">
-                          {chipEvents.slice(0, 2).map((ev) => {
-                            const c = getCategoryColor(eventCategories, ev.category)
-                            return (
-                              <div
-                                key={`${ev.id}-${ev._occurrenceDate || ''}`}
-                                className="home__eventChip"
-                                style={{
-                                  color: 'var(--text)',
-                                  background: `${c}26`,
-                                  border: `1px solid ${c}55`,
-                                }}
-                                title={ev.title}
-                              >
-                                {ev.title}
-                              </div>
-                            )
-                          })}
-                        </div>
                         {stripsForCell.length > 0 && (
                           <div className="home__calCellRangeStrips">
                             {stripsForCell.map((seg) => {
@@ -672,6 +653,25 @@ export default function HomePage() {
                             })}
                           </div>
                         )}
+                        <div className="home__eventChips">
+                          {chipEvents.slice(0, 2).map((ev) => {
+                            const c = getCategoryColor(eventCategories, ev.category)
+                            return (
+                              <div
+                                key={`${ev.id}-${ev._occurrenceDate || ''}`}
+                                className="home__eventChip"
+                                style={{
+                                  color: 'var(--text)',
+                                  background: `${c}26`,
+                                  border: `1px solid ${c}55`,
+                                }}
+                                title={ev.title}
+                              >
+                                {ev.title}
+                              </div>
+                            )
+                          })}
+                        </div>
                       </button>
                     )
                   })}

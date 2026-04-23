@@ -156,10 +156,10 @@
   min-height: 0;
 }
 
+/* 일자 바로 아래(칩 위): 기간 막대 — 셀 맨 아래가 아니라 읽는 순서대로 */
 .home__calCellRangeStrips {
   width: 100%;
-  margin-top: auto;
-  padding-top: 3px;
+  margin-top: 2px;
   display: flex;
   flex-direction: column;
   gap: 3px;
